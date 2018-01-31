@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fundo_degrade"
+    tools:context="gamesexchange.com.gamesexchange.activities.LoginActivity"
+    tools:layout_editor_absoluteY="25dp"
+    android:gravity="center_horizontal|center_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_alignLeft="@+id/button_logar"
+            android:layout_alignStart="@+id/button_logar"
+            android:layout_below="@+id/imageView"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/fundo_caixa_texto"
+            android:ems="10"
+            android:hint="@string/digiteSeuEmail"
+            android:inputType="textPersonName"
+            android:paddingLeft="10dp"
+            android:textColor="@color/branco"
+            android:textColorHint="@color/branco" />
+
+        <EditText
+            android:id="@+id/editTextSenha"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_alignLeft="@+id/editTextEmail"
+            android:layout_alignStart="@+id/editTextEmail"
+            android:layout_below="@+id/editTextEmail"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/fundo_caixa_texto"
+            android:ems="10"
+            android:hint="@string/digiteSuaSenha"
+            android:inputType="textPersonName|textPassword"
+            android:paddingLeft="10dp"
+            android:textColor="@color/branco"
+            android:textColorHint="@color/branco" />
+
+        <Button
+            android:id="@+id/button_logar"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/editTextSenha"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="19dp"
+            android:background="@drawable/fundo_botao"
+            android:text="@string/logar"
+            android:textAllCaps="false"
+            android:textColor="@color/branco"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_logar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:onClick="abrirCadastroUsuario"
+            android:text="@string/semConta"
+            android:textColor="@color/branco"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:text="@string/ou"
+            android:textColor="@color/branco"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_alignLeft="@+id/button_logar"
+            android:layout_alignStart="@+id/button_logar"
+            android:layout_below="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="17dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

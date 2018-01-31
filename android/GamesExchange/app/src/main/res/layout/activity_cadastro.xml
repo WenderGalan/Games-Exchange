@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fundo_degrade"
+    tools:context="gamesexchange.com.gamesexchange.activities.CadastroActivity"
+    android:gravity="center_vertical|center_horizontal">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        app:srcCompat="@drawable/add_user" />
+
+    <EditText
+        android:id="@+id/editTextNome"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:background="@drawable/fundo_caixa_texto"
+        android:ems="10"
+        android:hint="@string/nome"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco" />
+
+    <EditText
+        android:id="@+id/editTextEmailCadastro"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/editTextNome"
+        android:layout_alignStart="@+id/editTextNome"
+        android:layout_below="@+id/editTextNome"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fundo_caixa_texto"
+        android:hint="@string/digiteSeuEmail"
+        android:paddingLeft="10dp"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco" />
+
+    <EditText
+        android:id="@+id/editTextSenhaCadastro"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/editTextEmailCadastro"
+        android:layout_alignStart="@+id/editTextEmailCadastro"
+        android:layout_below="@+id/editTextEmailCadastro"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fundo_caixa_texto"
+        android:hint="@string/digiteSuaSenha"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco" />
+
+    <EditText
+        android:id="@+id/editTextSenhaNovamente"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/editTextSenhaCadastro"
+        android:layout_alignStart="@+id/editTextSenhaCadastro"
+        android:layout_below="@+id/editTextSenhaCadastro"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/fundo_caixa_texto"
+        android:hint="@string/digiteSuaSenhaNovamente"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco" />
+
+    <EditText
+        android:id="@+id/editTextTelefone"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/editTextSenhaNovamente"
+        android:layout_alignStart="@+id/editTextSenhaNovamente"
+        android:layout_below="@+id/editTextSenhaNovamente"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/fundo_caixa_texto"
+        android:hint="@string/digiteSeuTelefone"
+        android:paddingLeft="10dp"
+        android:textColor="@color/branco"
+        android:textColorHint="@color/branco"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/buttonCadastrar"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/editTextTelefone"
+        android:layout_alignStart="@+id/editTextTelefone"
+        android:layout_below="@+id/editTextTelefone"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/fundo_botao"
+        android:text="@string/cadastreSe"
+        android:textAllCaps="false"
+        android:textColor="@color/branco"
+        android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonCadastrar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:onClick="abrirTelaDosTermos"
+            android:text="@string/termos"
+            android:textAlignment="center"
+            android:textColor="@color/branco" />
+
+    </RelativeLayout>
+</RelativeLayout>

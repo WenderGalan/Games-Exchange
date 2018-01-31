@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "610393467686",
+    "firebase_url": "https://games-exchange-2018.firebaseio.com",
+    "project_id": "games-exchange-2018",
+    "storage_bucket": "games-exchange-2018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610393467686:android:6e4c35897e302202",
+        "android_client_info": {
+          "package_name": "gamesexchange.com.gamesexchange"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "610393467686-5rg1ojc045ejt3vp6jp48iahunlu0cb4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gamesexchange.com.gamesexchange",
+            "certificate_hash": "4d85247968ec9a9c1325eb2efcbac44db74737f6"
+          }
+        },
+        {
+          "client_id": "610393467686-i8kkuodlqoo9mr7e2a5de089uedmgpq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBquC-gTSUXQ0N0ULLopDk96CzgvnVhr9w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610393467686-i8kkuodlqoo9mr7e2a5de089uedmgpq9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Games Exchange</string>
+
+    <string name="facebook_app_id">773201052881607</string>
+    <string name="fb_login_protocol_scheme">fb773201052881607</string>
+
+    <string name="nome">Digite seu nome</string>
+    <string name="digiteSeuEmail">Digite seu email</string>
+    <string name="digiteSuaSenha">Digite sua senha</string>
+    <string name="branco">#FFFFFF</string>
+    <string name="logar">Logar</string>
+    <string name="semConta">Não tem conta? Cadastre-se</string>
+    <string name="sobrenome">Digite seu sobrenome</string>
+    <string name="digiteSuaSenhaNovamente">Digite sua senha novamente</string>
+    <string name="digiteSeuTelefone">Digite seu telefone</string>
+    <string name="ou">OU</string>
+    <string name="cadastreSe">Cadastre-se</string>
+    <string name="termos">Ao cadastrar-se, eu concordo com os Termos e Condições da Games Exchange</string>
+
+
+
+</resources>
