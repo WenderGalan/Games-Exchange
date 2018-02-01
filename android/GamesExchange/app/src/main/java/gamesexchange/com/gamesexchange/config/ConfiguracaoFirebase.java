@@ -3,6 +3,8 @@ package gamesexchange.com.gamesexchange.config;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * Created by Wender Galan Gamer on 28/12/2017.
@@ -12,6 +14,7 @@ public final class ConfiguracaoFirebase {
 
     private static DatabaseReference referenciaFirebase;
     private static FirebaseAuth autenticacao;
+    private static StorageReference referenciaStorage;
 
     public static DatabaseReference getFirebase(){
 
@@ -29,6 +32,14 @@ public final class ConfiguracaoFirebase {
         }
 
         return autenticacao;
+    }
+
+    public static StorageReference getStorage(){
+
+        if (referenciaStorage == null){
+            referenciaStorage = FirebaseStorage.getInstance().getReference();
+        }
+        return referenciaStorage;
     }
 
 }

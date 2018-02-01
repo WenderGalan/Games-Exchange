@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,10 +27,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class CadastroActivity extends AppCompatActivity {
 
-    private String VAZIO = "vazio";
     private EditText nome;
     private EditText email;
     private EditText senha;
@@ -127,20 +128,34 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-
                     Toast.makeText(CadastroActivity.this, "Usuário cadastrado com sucesso", Toast.LENGTH_LONG ).show();
 
-                    String identificadorUsuario = Base64Custom.codificarBase64(usuario.getEmail());
+                    //cadastra no banco de dados
+                    String identificadorUsuario = autenticacao.getCurrentUser().getUid();
                     usuario.setId(identificadorUsuario);
                     //Salva o usuario no Firebase
                     usuario.salvar();
                     //volta para o login
                     autenticacao.signOut();
-                    abrirTelaLogin();
-                    finish();
 
                     Preferencias preferencias = new Preferencias(CadastroActivity.this);
                     preferencias.salvarDados(identificadorUsuario, usuario.getNome());
+
+                    FirebaseUser firebaseUser = ConfiguracaoFirebase.getFirebaseAutenticacao().getCurrentUser();
+                    //Email de confirmação de usuário
+                    firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                //Toast.makeText(CadastroActivity.this, "Email de confirmação enviado", Toast.LENGTH_LONG).show();
+                                Log.i("DEBUG", "Email de confirmção enviado com sucesso. Erro: " + task.getException());
+                            }
+                        }
+                    });
+                    /**retorna true se foi verificado e false caso contrario
+                     * firebaseUser.isEmailVerified();
+                     * **/
+
 
                     abrirLoginUsuario();
 
@@ -180,11 +195,5 @@ public class CadastroActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://docs.google.com/document/d/1jTi7wk_K1SIhbdpK-yPWgK-g8IVbIPgFa3B20iFXm4M/edit?usp=sharing"));
         startActivity(intent);
-    }
-
-    private void abrirTelaLogin(){
-        Intent intent = new Intent(CadastroActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

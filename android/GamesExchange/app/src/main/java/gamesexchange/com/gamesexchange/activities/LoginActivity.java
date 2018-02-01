@@ -1,19 +1,25 @@
 package gamesexchange.com.gamesexchange.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import gamesexchange.com.gamesexchange.R;
@@ -36,6 +42,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -49,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private String identificadorUsuarioLogado;
     private DatabaseReference firebase;
     private ValueEventListener valueEventListenerUsuario;
+    private AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +91,19 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Log.i("DEBUG", "Metodo OnSuccess botao loginButton");
                 handleFacebookAcessToken(loginResult.getAccessToken());
+                abrirTelaPrincipal();
             }
 
             @Override
             public void onCancel() {
-
+                Log.i("DEBUG", "Metodo OnCancel botao loginButton");
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                Log.i("DEBUG", "Metodo OnError botao loginButton");
             }
         });
     }
@@ -132,11 +144,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "O login com o facebook falhou", Toast.LENGTH_LONG).show();
+                    Log.i("DEBUG", "Login com o facebook falhou. Erro: " + task.getException());
+                    recuperarDadosFacebook();
                 }
             }
         });
-
-
     }
 
     private void verificarUsuarioLogado(){
@@ -196,5 +208,104 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void esqueciMinhaSenha(View view) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+        //definindo um titulo
+        alertDialog.setTitle("Redefinir senha");
+        //definindo uma mensagem
+        alertDialog.setMessage("Digite seu email");
+
+        //Edit text dentro do Alert Dialog
+        final EditText input = new EditText(LoginActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        //passando ao Alert Dialog o edit text
+        alertDialog.setView(input);
+
+        //botao positivo - enviar
+        alertDialog.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //not null
+                Validator validator = new Validator();
+                if (!validator.validateNotNull(input)){
+                    //logica positiva - enviar
+                    FirebaseAuth autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+                    autenticacao.sendPasswordResetEmail(input.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(LoginActivity.this, "Email enviado com sucesso", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }else{
+                    input.setError("Email vazio");
+                    input.setFocusable(true);
+                    input.requestFocus();
+                }
+            }
+        });
+
+        //botao negativo - cancelar
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //logica negativa - cancelar
+                dialogInterface.cancel();
+            }
+        });
+        //mostrar o alert dialog
+        alertDialog.show();
+    }
+
+    public void recuperarDadosFacebook(){
+        //inserir no banco de dados
+        accessToken = AccessToken.getCurrentAccessToken();
+        if (accessToken != null){
+             GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    Usuario usuario = new Usuario();
+                    try {
+                        usuario.setNome(object.getString("name"));
+                        usuario.setEmail(object.getString("email"));
+                        usuario.setFoto("https://graph.facebook.com/" + object.getString("id") + "/picture");
+                        usuario.setEndereco(object.getString("address"));
+                        usuario.setAnunciosRemovidos(0);
+
+                        //inserir no firebase o usuario do facebook
+                        firebase = ConfiguracaoFirebase.getFirebase();
+
+                        String identificadorUsuario = autenticacao.getCurrentUser().getUid();
+                        usuario.setId(identificadorUsuario);
+                        //Salva o usuario no Firebase
+                        usuario.salvar();
+
+                        Preferencias preferencias = new Preferencias(LoginActivity.this);
+                        preferencias.salvarDados(identificadorUsuario, usuario.getNome());
+
+                        //abre a tela principal do app
+                        abrirTelaPrincipal();
+
+                    }catch (JSONException e){
+                        Log.i("DEBUG", "Erro ao pegar os objetos do facebook. Erro: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            Bundle parameters = new Bundle();
+            Log.i("DEBUG", "Pode dar erro aqui, verificar todos os parametros");
+            parameters.putString("fields", "name, email, address");
+            request.setParameters(parameters);
+            request.executeAsync();
+
+        }else{
+            Log.i("DEBUG", "Acess Token Nulo. AccessToken: " + accessToken);
+        }
+
     }
 }

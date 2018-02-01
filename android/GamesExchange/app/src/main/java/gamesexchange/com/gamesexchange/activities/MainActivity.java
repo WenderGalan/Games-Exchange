@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import gamesexchange.com.gamesexchange.R;
@@ -26,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth auth = ConfiguracaoFirebase.getFirebaseAutenticacao();
+                //deslogar do firebaase
                 auth.signOut();
+                //deslogar do facebook tambem
+                LoginManager.getInstance().logOut();
                 abrirTelaLogin();
             }
         });

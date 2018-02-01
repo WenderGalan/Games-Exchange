@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fundo_degrade"
+    tools:context="gamesexchange.com.gamesexchange.activities.NovoAnuncioActivity">
+
+    <TextView
+        android:id="@+id/textTitulo"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="86dp"
+        android:background="@drawable/fundo_caixa_texto"
+        android:hint="@string/titulo"
+        android:paddingLeft="10dp"
+        android:paddingTop="14dp"
+        android:textColorHint="@color/branco"
+        android:textSize="18sp" />
+</RelativeLayout>
