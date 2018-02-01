@@ -29,6 +29,7 @@ import gamesexchange.com.gamesexchange.helper.Base64Custom;
 import gamesexchange.com.gamesexchange.helper.Preferencias;
 import gamesexchange.com.gamesexchange.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -37,6 +38,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -93,7 +95,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.i("DEBUG", "Metodo OnSuccess botao loginButton");
                 handleFacebookAcessToken(loginResult.getAccessToken());
-                abrirTelaPrincipal();
             }
 
             @Override
@@ -145,8 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (!task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "O login com o facebook falhou", Toast.LENGTH_LONG).show();
                     Log.i("DEBUG", "Login com o facebook falhou. Erro: " + task.getException());
-                    recuperarDadosFacebook();
                 }
+                recuperarDadosFacebook();
             }
         });
     }
@@ -228,26 +229,27 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //not null
-                Validator validator = new Validator();
-                if (!validator.validateNotNull(input)){
-                    //logica positiva - enviar
-                    FirebaseAuth autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+                //logica positiva - enviar
+                FirebaseAuth autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+                if (input.getText().toString().isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Email não enviado", Toast.LENGTH_LONG).show();
+                    Log.i("DEBUG", "Campo Vazio");
+                }else{
                     autenticacao.sendPasswordResetEmail(input.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
                                 Toast.makeText(LoginActivity.this, "Email enviado com sucesso", Toast.LENGTH_LONG).show();
+                                Log.i("DEBUG", "Erro: "+task.getException());
+                            }else{
+                                Toast.makeText(LoginActivity.this, "Email inválido", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                }else{
-                    input.setError("Email vazio");
-                    input.setFocusable(true);
-                    input.requestFocus();
                 }
             }
         });
+
 
         //botao negativo - cancelar
         alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -273,7 +275,6 @@ public class LoginActivity extends AppCompatActivity {
                         usuario.setNome(object.getString("name"));
                         usuario.setEmail(object.getString("email"));
                         usuario.setFoto("https://graph.facebook.com/" + object.getString("id") + "/picture");
-                        usuario.setEndereco(object.getString("address"));
                         usuario.setAnunciosRemovidos(0);
 
                         //inserir no firebase o usuario do facebook

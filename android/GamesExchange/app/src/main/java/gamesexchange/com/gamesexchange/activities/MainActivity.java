@@ -16,6 +16,7 @@ import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 public class MainActivity extends AppCompatActivity {
 
     private Button sair;
+    private Button trocar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
                 //deslogar do facebook tambem
                 LoginManager.getInstance().logOut();
                 abrirTelaLogin();
+            }
+        });
+
+        trocar = findViewById(R.id.button2);
+        trocar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AnuncioDetalheActivity.class);
+                startActivity(intent);
             }
         });
 

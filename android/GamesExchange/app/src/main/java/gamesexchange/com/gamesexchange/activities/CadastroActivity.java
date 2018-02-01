@@ -135,13 +135,12 @@ public class CadastroActivity extends AppCompatActivity {
                     usuario.setId(identificadorUsuario);
                     //Salva o usuario no Firebase
                     usuario.salvar();
-                    //volta para o login
-                    autenticacao.signOut();
 
                     Preferencias preferencias = new Preferencias(CadastroActivity.this);
                     preferencias.salvarDados(identificadorUsuario, usuario.getNome());
 
                     FirebaseUser firebaseUser = ConfiguracaoFirebase.getFirebaseAutenticacao().getCurrentUser();
+                    Log.i("DEBUG", "firebaseUser: " + firebaseUser);
                     //Email de confirmação de usuário
                     firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -149,16 +148,13 @@ public class CadastroActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 //Toast.makeText(CadastroActivity.this, "Email de confirmação enviado", Toast.LENGTH_LONG).show();
                                 Log.i("DEBUG", "Email de confirmção enviado com sucesso. Erro: " + task.getException());
+                                abrirTelaPrincipal();
                             }
                         }
                     });
                     /**retorna true se foi verificado e false caso contrario
                      * firebaseUser.isEmailVerified();
                      * **/
-
-
-                    abrirLoginUsuario();
-
                 }else{
                     String erroExcecao = "";
                     try {
@@ -185,8 +181,8 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void abrirLoginUsuario(){
-        Intent intent = new Intent(CadastroActivity.this, LoginActivity.class);
+    private void abrirTelaPrincipal() {
+        Intent intent = new Intent(CadastroActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
