@@ -20,7 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity" />
+        <!-- NÀO DEIXA LEVANTAR A ACTIVITY - SUBIR A TABS DE BAIXO (ADJUSTPAN|ADJUSTNOTHING) -->
+        <activity
+            android:name=".activities.MainActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -49,15 +52,8 @@
             android:label="@string/title_activity_anuncio_detalhe"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.NovoAnuncioActivity" />
-        <activity
-            android:name=".activities.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:parentActivityName=".activities.NovoAnuncioActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="gamesexchange.com.gamesexchange.activities.NovoAnuncioActivity" />
-        </activity>
+        <activity android:name=".activities.ConfiguracoesActivity" />
+        <activity android:name=".activities.EditarPerfilActivity"></activity>
     </application>
 
 </manifest>

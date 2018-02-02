@@ -284,9 +284,6 @@ public class LoginActivity extends AppCompatActivity {
                         Preferencias preferencias = new Preferencias(LoginActivity.this);
                         preferencias.salvarDados(identificadorUsuario, usuario.getNome());
 
-                        //abre a tela principal do app
-                        abrirTelaPrincipal();
-
                     }catch (JSONException e){
                         Log.i("DEBUG", "Erro ao pegar os objetos do facebook. Erro: " + e.getMessage());
                         e.printStackTrace();
@@ -303,6 +300,9 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             Log.i("DEBUG", "Acess Token Nulo. AccessToken: " + accessToken);
         }
+
+        //abre a tela principal do app
+        abrirTelaPrincipal();
 
     }
 }
