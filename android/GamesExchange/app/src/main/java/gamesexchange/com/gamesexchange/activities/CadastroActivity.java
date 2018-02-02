@@ -14,7 +14,6 @@ import android.widget.Toast;
 import gamesexchange.com.gamesexchange.R;
 import gamesexchange.com.gamesexchange.util.Validator;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
-import gamesexchange.com.gamesexchange.helper.Base64Custom;
 import gamesexchange.com.gamesexchange.helper.Preferencias;
 import gamesexchange.com.gamesexchange.model.Usuario;
 

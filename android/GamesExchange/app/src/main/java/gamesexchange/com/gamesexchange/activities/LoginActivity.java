@@ -19,17 +19,14 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import gamesexchange.com.gamesexchange.R;
 import gamesexchange.com.gamesexchange.util.Validator;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
-import gamesexchange.com.gamesexchange.helper.Base64Custom;
 import gamesexchange.com.gamesexchange.helper.Preferencias;
 import gamesexchange.com.gamesexchange.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -38,7 +35,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -173,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    identificadorUsuarioLogado = Base64Custom.codificarBase64(usuario.getEmail());
+                    identificadorUsuarioLogado = ConfiguracaoFirebase.getFirebaseAutenticacao().getCurrentUser().getUid();
                     firebase = ConfiguracaoFirebase.getFirebase().child("usuarios").child(identificadorUsuarioLogado);
                     valueEventListenerUsuario = new ValueEventListener() {
                         @Override

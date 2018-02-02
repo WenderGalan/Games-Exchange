@@ -3,7 +3,7 @@
     package="gamesexchange.com.gamesexchange">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -48,7 +48,16 @@
             android:name=".activities.AnuncioDetalheActivity"
             android:label="@string/title_activity_anuncio_detalhe"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.NovoAnuncioActivity"></activity>
+        <activity android:name=".activities.NovoAnuncioActivity" />
+        <activity
+            android:name=".activities.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:parentActivityName=".activities.NovoAnuncioActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="gamesexchange.com.gamesexchange.activities.NovoAnuncioActivity" />
+        </activity>
     </application>
 
 </manifest>
