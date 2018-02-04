@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -49,9 +52,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private Button salvarAlteracoes;
     private Button alterarSenha;
     private CircleImageView imagem;
-    private Usuario usuario;
-    private DatabaseReference databaseReference;
-    private StorageReference storageReference;
+    private Usuario usuarioAntigo;
+    private Usuario usuarioNovo;
     private static final int GALLERY_INTENT = 2;
     private ProgressDialog progressDialog;
 
@@ -72,47 +74,52 @@ public class EditarPerfilActivity extends AppCompatActivity {
         salvarAlteracoes = findViewById(R.id.buttonSalvarAlteracao);
 
         progressDialog = new ProgressDialog(this);
-        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
+        usuarioAntigo = (Usuario) getIntent().getSerializableExtra("usuario");
+        try {
+            usuarioNovo = usuarioAntigo.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
 
-        if (usuario != null){
+        if (usuarioAntigo != null){
             //seta o nome
-            nome.setText(usuario.getNome());
+            nome.setText(usuarioAntigo.getNome());
             //seta a foto
-            if (usuario.getFoto() != null){
+            if (usuarioAntigo.getFoto() != null){
                 try {
-                    Picasso.with(getApplicationContext()).load(usuario.getFoto()).into(imagem);
+                    Picasso.with(getApplicationContext()).load(usuarioAntigo.getFoto()).into(imagem);
                 }catch(Exception e){
                     Log.i("DEBUG", "Não foi possivel setar a imagem");
                     e.printStackTrace();
                 }
             }
             //seta o telefone
-            if (usuario.getTelefone() != null){
+            if (usuarioAntigo.getTelefone() != null){
                 /**FORMATAÇÃO DO TELEFONE**/
                 SimpleMaskFormatter simpleMaskFormatter = new SimpleMaskFormatter("(NN) NNNNN-NNNN");
                 MaskTextWatcher maskTelefone = new MaskTextWatcher(telefone, simpleMaskFormatter);
                 telefone.addTextChangedListener(maskTelefone);
-                telefone.setText(usuario.getTelefone());
+                telefone.setText(usuarioAntigo.getTelefone());
             }else{
                 SimpleMaskFormatter simpleMaskFormatter = new SimpleMaskFormatter("(NN) NNNNN-NNNN");
                 MaskTextWatcher maskTelefone = new MaskTextWatcher(telefone, simpleMaskFormatter);
                 telefone.addTextChangedListener(maskTelefone);
             }
             //seta o cep
-            if (usuario.getCep() != null){
+            if (usuarioAntigo.getCep() != null){
                 /**FORMATAÇÃO DO CEP**/
                 SimpleMaskFormatter simpleMaskFormatter = new SimpleMaskFormatter("NNNNN-NNN");
                 MaskTextWatcher maskTelefone = new MaskTextWatcher(cep, simpleMaskFormatter);
                 cep.addTextChangedListener(maskTelefone);
-                cep.setText(usuario.getCep());
+                cep.setText(usuarioAntigo.getCep());
             }else{
                 SimpleMaskFormatter simpleMaskFormatter = new SimpleMaskFormatter("NNNNN-NNN");
                 MaskTextWatcher maskTelefone = new MaskTextWatcher(cep, simpleMaskFormatter);
                 cep.addTextChangedListener(maskTelefone);
             }
             //seta a localização
-            if (usuario.getCidade() != null && usuario.getEstado() != null){
-                String localizacao = usuario.getCidade() + " - " + usuario.getEstado();
+            if (usuarioAntigo.getCidade() != null && usuarioAntigo.getEstado() != null){
+                String localizacao = usuarioAntigo.getCidade() + " - " + usuarioAntigo.getEstado();
                 cidadeEstado.setText(localizacao);
             }
 
@@ -190,9 +197,9 @@ public class EditarPerfilActivity extends AppCompatActivity {
                         CEP objCEP = new BuscarCEP(cepSemFormatacao).execute().get();
                         //seta o objeto CEP no objeto USUARIO
                         if (objCEP.getCep() != null) {
-                            usuario.setCep(objCEP.getCep());
-                            usuario.setCidade(objCEP.getLocalidade());
-                            usuario.setEstado(objCEP.getUf());
+                            usuarioAntigo.setCep(objCEP.getCep());
+                            usuarioAntigo.setCidade(objCEP.getLocalidade());
+                            usuarioAntigo.setEstado(objCEP.getUf());
                         }
 
 
@@ -212,7 +219,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
                 //verifica se a formatacao do telefone esta correta
                 if (telefoneSemFormatacao != null && telefoneSemFormatacao.length() == 11){
-                    usuario.setTelefone(telefoneSemFormatacao);
+                    usuarioAntigo.setTelefone(telefoneSemFormatacao);
                 }else{
                     Validator validator = new Validator();
                     if (validator.validateNotNull(telefone)){
@@ -223,9 +230,11 @@ public class EditarPerfilActivity extends AppCompatActivity {
                 }
 
                 //seta o nome do usuario
-                usuario.setNome(nome.getText().toString());
+                usuarioAntigo.setNome(nome.getText().toString());
+                //recupera a imagem para salvar caso tenha alguma altercao
+                usuarioAntigo.setFoto(usuarioNovo.getFoto());
                 //salva no banco de dados
-                usuario.salvar();
+                usuarioAntigo.salvar();
                 //
                 Toast.makeText(EditarPerfilActivity.this, "Usuário alterado com sucesso", Toast.LENGTH_LONG).show();
                 finish();
@@ -233,92 +242,90 @@ public class EditarPerfilActivity extends AppCompatActivity {
             }
         });
 
-        storageReference = ConfiguracaoFirebase.getStorage();
+        imagem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //abrir o selecionador de imagem
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_INTENT);
+            }
+        });
 
     }
-
-
-    public void abrirSelecaoImagem(View view) {
-        //abrir o selecionador de imagem
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, GALLERY_INTENT);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-
-
-
-
-
-
-
-
-        /**ESTA DANDO PROBLEMA NO RESGATE DA IMAGEM**/
-
-
-
-
-
-
-
-
         if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
+            Uri uri = data.getData();
+
             progressDialog.setMessage("Mudando a foto de perfil...");
             progressDialog.show();
 
-            Uri uri = data.getData();
-
-            //cria a estrutura de pastas => UID USUARIO => perfil => IMAGEM
-            storageReference.child(usuario.getId()).child("perfil").child(uri.getLastPathSegment());
-
-            //upa a imagem ao Storage
-            storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            StorageReference storageRef = ConfiguracaoFirebase.getStorage();
+            //Cada usuario tem uma pasta com seu UID e dentro tem duas pastas com sua foto de perfil e a foto de seus anuncios
+            StorageReference imagemPerfil = storageRef.child(usuarioAntigo.getId() + "/" + "perfil/" + uri.getLastPathSegment());
+            //upa a imagem ao storage
+            UploadTask uploadTask = imagemPerfil.putFile(uri);
+            //Listener para verificar o estado da task de upload
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Log.i("DEBUG", "Entrou no onSucess");
+                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    usuarioNovo.setFoto(downloadUrl.toString());
+                    //salva no banco a nova imagem
+                    usuarioNovo.salvar();
 
-                    //Pega a URL da imagem
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    String urlImagem = downloadUrl.toString();
+                    if (usuarioAntigo.getFoto() != null){
+                        String procurarPor = "https://graph.facebook.com/";
+                        //verifica se a imagem nao é do facebook
+                        if (usuarioAntigo.getFoto().toLowerCase().contains(procurarPor.toLowerCase())){
+                            Log.i("DEBUG", "A imagem é oriunda do facebook");
+                        }else{
+                            //pega o nome da imagem para poder apagar a mesma
+                            String nome = FirebaseStorage.getInstance().getReferenceFromUrl(usuarioAntigo.getFoto()).getName();
+                            //recebe a referencia da imagem a ser excluida
+                            StorageReference imagemPerfil = ConfiguracaoFirebase.getStorage().child(usuarioAntigo.getId()).child("perfil/").child(nome);
 
-                    //pega a instancia do Firebase
-                    databaseReference = ConfiguracaoFirebase.getFirebase();
+                            Log.i("DEBUG", "imagemPerfilReferencia: " + imagemPerfil);
+                            imagemPerfil.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i("DEBUG", "Sucesso na deleção da imagem do usuario");
+                                    //salva a url da foto no banco + as informacoes do usuario
 
-                    //Guarda no banco de dados do usuario a URL da foto
-                    databaseReference.child("usuarios").child(usuario.getId()).child("foto").setValue(urlImagem);
-
-                    databaseReference.child("usuarios").child(usuario.getId()).child("foto").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.i("DEBUG", "Entrou no onDataChange");
-                            String urlImagem = (String) dataSnapshot.getValue();
-                            Picasso.with(EditarPerfilActivity.this).load(urlImagem).into(imagem);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i("DEBUG", "Não foi possivel deletar a imagem de perfil do usuario do Storage. Erro: " + e.getMessage());
+                                }
+                            });
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.i("DEBUG", "Entrou no Cancelled");
-                        }
-                    });
-
+                    //verifica se a imagem do usuario nao é nula e seta na activity
+                    if (usuarioNovo.getFoto() != null){
+                        Picasso.with(EditarPerfilActivity.this).load(usuarioNovo.getFoto()).into(imagem);
+                    }
                     progressDialog.dismiss();
-                    Toast.makeText(EditarPerfilActivity.this, "Foto de perfil alterada com sucesso", Toast.LENGTH_LONG).show();
-
-
-
+                    Toast.makeText(EditarPerfilActivity.this, "Imagem alterada com sucesso", Toast.LENGTH_LONG).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditarPerfilActivity.this, "Não foi possível alterar sua imagem de perfil", Toast.LENGTH_LONG).show();
+                    Log.i("DEBUG", "Exception: " + e.getMessage());
                 }
             });
-
-
 
 
         }
 
     }
+
+
+
 }

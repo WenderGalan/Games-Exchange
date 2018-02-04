@@ -27,7 +27,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:background="@color/azulForte"
-                android:onClick="abrirSelecaoImagem"
                 android:src="@drawable/ic_camera"
                 app:civ_border_color="#000000" />
 

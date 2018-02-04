@@ -16,7 +16,7 @@ import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
  * A classe implementa a interface Serializable por que necessita passar um objeto como parametro a proxima activity
  * **/
 
-public class Usuario implements Serializable{
+public class Usuario implements Serializable, Cloneable{
 	private String id;
 	private String nome;
 	private String telefone;
@@ -104,9 +104,13 @@ public class Usuario implements Serializable{
 		referenciaFirebase.child("usuarios").child(getId()).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
-				Log.i("DEBUG", "Usuário salvo com suceso!");
+				Log.i("DEBUG", "Usuário salvo com sucesso");
 			}
 		});
+	}
+
+	public Usuario clone() throws CloneNotSupportedException {
+		return (Usuario) super.clone();
 	}
 
 

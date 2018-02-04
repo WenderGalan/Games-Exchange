@@ -15,6 +15,7 @@ public final class ConfiguracaoFirebase {
     private static DatabaseReference referenciaFirebase;
     private static FirebaseAuth autenticacao;
     private static StorageReference referenciaStorage;
+    private static StorageReference referenciaStorageFromUrl;
 
 
     public static DatabaseReference getFirebase(){
@@ -41,6 +42,14 @@ public final class ConfiguracaoFirebase {
             referenciaStorage = FirebaseStorage.getInstance().getReference();
         }
         return referenciaStorage;
+    }
+
+    public static StorageReference getStorage(String url){
+
+        if (referenciaStorageFromUrl == null){
+            referenciaStorageFromUrl = FirebaseStorage.getInstance().getReferenceFromUrl(url);
+        }
+        return referenciaStorageFromUrl;
     }
 
 }

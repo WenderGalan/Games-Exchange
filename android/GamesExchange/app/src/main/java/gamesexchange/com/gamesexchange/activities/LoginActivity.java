@@ -2,6 +2,7 @@ package gamesexchange.com.gamesexchange.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -278,10 +279,24 @@ public class LoginActivity extends AppCompatActivity {
                         firebase = ConfiguracaoFirebase.getFirebase();
 
                         String identificadorUsuario = autenticacao.getCurrentUser().getUid();
-                        usuario.setId(identificadorUsuario);
-                        //Salva o usuario no Firebase
-                        usuario.salvar();
 
+                        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("usuarios").child(identificadorUsuario);
+                        if (databaseReference == null){
+                            //seta o id
+                            usuario.setId(identificadorUsuario);
+                            //Salva o usuario no Firebase
+                            usuario.salvar();
+                        }else{
+                            DatabaseReference usuarioCurrent = databaseReference.child("usuarios").child(identificadorUsuario);
+                            //imagem diferente de nula
+                            String imagem = usuarioCurrent.child("foto").toString();
+                            Log.i("DEBUG", "Imagem: " + imagem);
+                            String procurarPor = "https://graph.facebook.com/";
+                            //se a imagem é do facebook ele pode setar novamente
+                            if (imagem.toLowerCase().contains(procurarPor.toLowerCase())){
+                                usuarioCurrent.child("foto").setValue("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+                            }
+                        }
                         Preferencias preferencias = new Preferencias(LoginActivity.this);
                         preferencias.salvarDados(identificadorUsuario, usuario.getNome());
 
