@@ -38,6 +38,7 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'de.hdodenhof:circleimageview:2.2.0'
+    compile 'com.github.gilberto-torrezan:viacep:1.2.0'
 
 }
 

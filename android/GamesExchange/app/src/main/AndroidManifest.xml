@@ -23,7 +23,7 @@
         <!-- NÀO DEIXA LEVANTAR A ACTIVITY - SUBIR A TABS DE BAIXO (ADJUSTPAN|ADJUSTNOTHING) -->
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustPan|adjustNothing" />
+            android:windowSoftInputMode="adjustPan|adjustNothing|stateHidden"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -53,7 +53,8 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.NovoAnuncioActivity" />
         <activity android:name=".activities.ConfiguracoesActivity" />
-        <activity android:name=".activities.EditarPerfilActivity"></activity>
+        <activity android:name=".activities.EditarPerfilActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

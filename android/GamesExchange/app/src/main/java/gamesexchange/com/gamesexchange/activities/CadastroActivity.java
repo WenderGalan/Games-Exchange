@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import gamesexchange.com.gamesexchange.R;
+import gamesexchange.com.gamesexchange.model.CEP;
 import gamesexchange.com.gamesexchange.util.Validator;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.helper.Preferencias;
@@ -38,6 +39,8 @@ public class CadastroActivity extends AppCompatActivity {
     private Button cadastrar;
     private Usuario usuario = new Usuario();;
     private FirebaseAuth autenticacao;
+    private String telefoneSemFormatacao;
+    private String telefoneCompleto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class CadastroActivity extends AppCompatActivity {
         cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (validarCampos()){
                     String primeiraSenha = senha.getText().toString();
                     String segundaSenha = senhaNovamente.getText().toString();
@@ -66,7 +70,12 @@ public class CadastroActivity extends AppCompatActivity {
                         usuario.setNome(nome.getText().toString());
                         usuario.setEmail(email.getText().toString());
                         usuario.setSenha(primeiraSenha);
-                        usuario.setTelefone(telefone.getText().toString());
+
+                        //Retira a mascara do telefone
+                        telefoneCompleto = telefone.getText().toString();
+                        telefoneSemFormatacao = telefoneCompleto.replaceAll("[^0-9]", "");
+                        Log.i("DEBUG", "Telefone sem formatação: " + telefoneSemFormatacao);
+                        usuario.setTelefone(telefoneSemFormatacao);
                         cadastrarUsuario();
                     }else{
                         //Solicita foco para a senha errada

@@ -16,6 +16,7 @@ public final class ConfiguracaoFirebase {
     private static FirebaseAuth autenticacao;
     private static StorageReference referenciaStorage;
 
+
     public static DatabaseReference getFirebase(){
 
         if (referenciaFirebase == null) {

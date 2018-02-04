@@ -217,6 +217,7 @@ public class LoginActivity extends AppCompatActivity {
         //Edit text dentro do Alert Dialog
         final EditText input = new EditText(LoginActivity.this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setGravity(1);
         input.setLayoutParams(lp);
         //passando ao Alert Dialog o edit text
         alertDialog.setView(input);
@@ -270,7 +271,7 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         usuario.setNome(object.getString("name"));
                         usuario.setEmail(object.getString("email"));
-                        usuario.setFoto("https://graph.facebook.com/" + object.getString("id") + "/picture");
+                        usuario.setFoto("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
                         usuario.setAnunciosRemovidos(0);
 
                         //inserir no firebase o usuario do facebook

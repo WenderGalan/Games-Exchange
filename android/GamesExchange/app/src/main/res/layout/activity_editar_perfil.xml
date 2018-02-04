@@ -1,9 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/azulForte"
     tools:context="gamesexchange.com.gamesexchange.activities.EditarPerfilActivity">
 
-</android.support.constraint.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewCircleEditarPerfil"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@color/azulForte"
+                android:onClick="abrirSelecaoImagem"
+                android:src="@drawable/ic_camera"
+                app:civ_border_color="#000000" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="350dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/branco"
+                android:gravity="center"
+                android:text="@string/alterar_imagem"/>
+
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="350dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/branco"
+                android:gravity="left"
+                android:text="@string/nome"/>
+
+            <EditText
+                android:id="@+id/editTextEditarPerfilNome"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/imageViewCircleEditarPerfil"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/fundo_caixa_texto"
+                android:ems="10"
+                android:hint="@string/digiteSeuNome"
+                android:inputType="textPersonName"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/branco"
+                android:textColorHint="@color/branco" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="350dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/branco"
+                android:gravity="left"
+                android:text="@string/telefone"/>
+
+            <EditText
+                android:id="@+id/editTextEditarPerfilTelefone"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/editTextEditarPerfilNome"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/fundo_caixa_texto"
+                android:ems="10"
+                android:hint="@string/digiteSeuTelefone"
+                android:inputType="number"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/branco"
+                android:textColorHint="@color/branco" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="350dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/branco"
+                android:gravity="left"
+                android:text="@string/cep"/>
+
+            <EditText
+                android:id="@+id/editTextEditarPerfilCep"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/editTextEditarPerfilNome"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/fundo_caixa_texto"
+                android:ems="10"
+                android:hint="@string/cepInteiro"
+                android:inputType="number"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/branco"
+                android:textColorHint="@color/branco" />
+
+            <TextView
+                android:id="@+id/textViewCidadeEstado"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:gravity="end"
+                android:textAlignment="textEnd"
+                android:textColor="@color/branco" />
+
+            <Button
+                android:id="@+id/buttonAlterarSenha"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/fundo_botao"
+                android:text="@string/alterar_senha"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/buttonSalvarAlteracao"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/fundo_botao"
+                android:text="@string/salvar_alteracao"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+</RelativeLayout>

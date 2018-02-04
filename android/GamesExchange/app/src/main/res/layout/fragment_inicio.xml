@@ -6,9 +6,7 @@
     tools:context="gamesexchange.com.gamesexchange.fragments.InicioFragment"
     android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
+    <!--NAO DEIXA ABRIR O FOCO NO TECLADO-->
     <SearchView
         android:id="@+id/search"
         android:layout_width="match_parent"
@@ -18,7 +16,9 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"
         android:queryHint="@string/buscar"
-        android:iconifiedByDefault="false" />
+        android:iconifiedByDefault="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <ListView
         android:id="@+id/list_view_anuncio"

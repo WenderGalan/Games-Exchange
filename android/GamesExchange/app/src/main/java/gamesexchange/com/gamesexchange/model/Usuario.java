@@ -8,13 +8,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
+
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 
-public class Usuario {
+/**
+ * A classe implementa a interface Serializable por que necessita passar um objeto como parametro a proxima activity
+ * **/
+
+public class Usuario implements Serializable{
 	private String id;
 	private String nome;
 	private String telefone;
-	private String endereco;
+	private String cep;
+	private String cidade;
+	private String estado;
 	private String email;
 	private String senha;
 	private String foto; //URL da imagem
@@ -58,12 +66,6 @@ public class Usuario {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-	public String getEndereco() {
-		return endereco;
-	}
-	public void setEndereco(String endereco) {
-		this.endereco = endereco;
-	}
 	public String getEmail() {
 		return email;
 	}
@@ -75,6 +77,26 @@ public class Usuario {
 	}
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+	public String getCidade() {
+		return cidade;
+	}
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
 
 	public void salvar(){
