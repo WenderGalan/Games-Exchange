@@ -58,7 +58,7 @@ Próximas Releases:
 - ACCESS COARSE LOCATION
 - CALL PHONE
 
-##Registros de mudanças##
+###Registros de mudanças
 **- 1.0 Versão Inicial**
   - Postagem, alteração, e exclusão de anúncios.
   - Cadastro, login, e alteração de usuários.
