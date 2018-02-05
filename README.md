@@ -59,10 +59,10 @@ Próximas Releases:
 - CALL PHONE
 
 ### Registros de mudanças
-**- 1.0 Versão Inicial**
-    - Postagem, alteração, e exclusão de anúncios.
-    - Cadastro, login, e alteração de usuários.
-    - Compartilhamento do app
-    - Configurações de usuário
-    - Armazenamento de preferências
-    - Validação de campos e de dados
+**- 1.0 Versão Inicial** 
+  - Postagem, alteração, e exclusão de anúncios.
+  - Cadastro, login, e alteração de usuários. 
+  - Compartilhamento do app 
+  - Configurações de usuário 
+  - Armazenamento de preferências
+  - Validação de campos e de dados
