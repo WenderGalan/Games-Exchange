@@ -130,5 +130,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="alterar_senha">Alterar senha</string>
     <string name="alterar_imagem">Clique na imagem para alterar</string>
+    <string name="tipoDeAnuncio">Tipo de Anúncio</string>
+
 
 </resources>

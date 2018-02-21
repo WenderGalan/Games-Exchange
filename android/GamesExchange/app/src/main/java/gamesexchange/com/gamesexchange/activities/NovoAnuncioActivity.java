@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gamesexchange.com.gamesexchange.R;
+import gamesexchange.com.gamesexchange.adapter.HintAdapter;
+import gamesexchange.com.gamesexchange.config.ListaItens;
 import gamesexchange.com.gamesexchange.model.Anuncio;
 
 public class NovoAnuncioActivity extends AppCompatActivity{
@@ -28,9 +31,12 @@ public class NovoAnuncioActivity extends AppCompatActivity{
     private CircleImageView imagem5;
     private EditText titulo;
     private EditText descricao;
-    private Spinner spinner;
+    private Spinner spinnerTipoDeAnuncio;
+    private Spinner spinnerCategoria;
     private List<String> imagesEncodedList;
     private String imageEncoded;
+    private List<String> listaTipoAnuncio;
+    private List<String> listaCategoria;
 
 
 
@@ -56,17 +62,92 @@ public class NovoAnuncioActivity extends AppCompatActivity{
         descricao = findViewById(R.id.textDescricao);
         //desabilita o campo
         //descricao.setEnabled(false);
-        spinner = findViewById(R.id.spinner);
 
-       /* List<String> list = new ArrayAdapter<String>();
-        list.add("Venda");
-        list.add("Troca");
-        list.add("Venda ou Troca");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
+        /**configuracao do Spinner Categoria**/
+        spinnerCategoria = findViewById(R.id.spinnerCategoria);
+        listaCategoria = ListaItens.getListaCategoria();
 
-        spinner.setOnItemSelectedListener(this);*/
+        //seta o adapter para consumir toda a lista menos o último item porque o mesmo é o hint da caixa de seleção
+        HintAdapter adapterCategoria = new HintAdapter(this, R.layout.spinner_item, listaCategoria);
+        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategoria.setAdapter(adapterCategoria);
+        spinnerCategoria.setSelection(adapterCategoria.getCount());
+
+
+        /**
+         *
+         * SETAR O SPINNER TIPO E COM ISSO CONSEGUIMOS UMA CATEGORIA E TIPO DO PRODUTO
+         *
+         * **/
+
+
+        //abrir outro spinner com as categorias desejadas
+        spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String resultado = listaCategoria.get(i).toString();
+                if (resultado.equals(listaCategoria.get(0).toString())){
+                    //clicou em videogames
+
+                }else if (resultado.equals(listaCategoria.get(1).toString())){
+                    //clicou em computadores e acessorios
+
+                }else if (resultado.equals(listaCategoria.get(2).toString())){
+                    //clicou em celulares e telefonia
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //Nenhum item foi selecionado
+            }
+        });
+
+
+
+        /**configuracao do spinner Tipo de Anuncio**/
+        spinnerTipoDeAnuncio = findViewById(R.id.spinnerTipoDeAnuncio);
+        listaTipoAnuncio = ListaItens.getListaTipoAnuncio();
+
+        //seta o adapter para consumir toda a lista menos o último item porque o mesmo é o hint da caixa de seleção
+        HintAdapter adapterAnuncio = new HintAdapter(this, R.layout.spinner_item, listaTipoAnuncio);
+        adapterAnuncio.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTipoDeAnuncio.setAdapter(adapterAnuncio);
+        spinnerTipoDeAnuncio.setSelection(adapterAnuncio.getCount());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        spinnerTipoDeAnuncio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //aqui ele sempre entrara no ambos ou seja será o fluxo padrao
+                //listaSpinner.get(i) => pega o item que foi clicado
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
 
 

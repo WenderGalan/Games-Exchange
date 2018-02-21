@@ -22,6 +22,7 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:layout_marginTop="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -40,7 +41,7 @@
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
                         app:civ_border_color="#FF000000"
-                        app:civ_border_width="1dp" />
+                        android:src="@drawable/ic_camera"/>
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imageViewCircle2"
@@ -49,12 +50,11 @@
                         android:layout_alignEnd="@+id/textTitulo"
                         android:layout_alignRight="@+id/textTitulo"
                         android:layout_below="@+id/textTitulo"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
-                        app:civ_border_color="#FF000000"
-                        app:civ_border_width="1dp" />
+                        android:src="@drawable/ic_camera"
+                        app:civ_border_color="#FF000000"/>
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imageViewCircle3"
@@ -63,12 +63,11 @@
                         android:layout_alignEnd="@+id/textTitulo"
                         android:layout_alignRight="@+id/textTitulo"
                         android:layout_below="@+id/textTitulo"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
                         app:civ_border_color="#FF000000"
-                        app:civ_border_width="1dp" />
+                        android:src="@drawable/ic_camera"/>
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imageViewCircle4"
@@ -77,12 +76,11 @@
                         android:layout_alignEnd="@+id/textTitulo"
                         android:layout_alignRight="@+id/textTitulo"
                         android:layout_below="@+id/textTitulo"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
                         app:civ_border_color="#FF000000"
-                        app:civ_border_width="1dp" />
+                        android:src="@drawable/ic_camera"/>
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imageViewCircle5"
@@ -91,12 +89,11 @@
                         android:layout_alignEnd="@+id/textTitulo"
                         android:layout_alignRight="@+id/textTitulo"
                         android:layout_below="@+id/textTitulo"
-                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
                         app:civ_border_color="#FF000000"
-                        app:civ_border_width="1dp" />
+                        android:src="@drawable/ic_camera"/>
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -131,16 +128,33 @@
                 android:scrollHorizontally="false"
                 android:scrollbars="vertical"
                 android:textColor="@color/branco"
-                android:textColorHint="@color/branco" />
+                android:textColorHint="@color/branco"/>
 
             <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
+                android:id="@+id/spinnerCategoria"
+                android:layout_width="350dp"
                 android:layout_height="40dp"
-                android:layout_below="@id/textDescricao"
-                android:layout_marginLeft="17dp"
-                android:layout_marginRight="17dp"
-                android:layout_marginTop="5dp" />
+                android:layout_alignLeft="@+id/textDescricao"
+                android:layout_alignStart="@+id/textDescricao"
+                android:layout_below="@+id/textDescricao"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/fundo_caixa_texto"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp" />
+
+            <Spinner
+                android:id="@+id/spinnerTipoDeAnuncio"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/textDescricao"
+                android:layout_alignStart="@+id/textDescricao"
+                android:layout_below="@+id/spinnerCategoria"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/fundo_caixa_texto"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp" />
 
 
         </RelativeLayout>
