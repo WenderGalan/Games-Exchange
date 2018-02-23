@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -14,8 +15,10 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.QuickContactBadge;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +63,8 @@ public class NovoAnuncioActivity extends AppCompatActivity{
     private EditText titulo;
     private EditText descricao;
     private EditText preco;
-    private TextView localizaco;
+    private Button publicar;
+    private TextView localizacao;
     private Spinner spinnerTipoDeAnuncio;
     private Spinner spinnerCategoria;
     private Spinner spinnerTipo;
@@ -119,8 +123,8 @@ public class NovoAnuncioActivity extends AppCompatActivity{
         titulo = findViewById(R.id.textTitulo);
         descricao = findViewById(R.id.textDescricao);
         preco = findViewById(R.id.textValor);
-        localizaco = findViewById(R.id.textViewLocalizacao);
-
+        localizacao = findViewById(R.id.textViewLocalizacao);
+        publicar = findViewById(R.id.buttonPublicar);
 
 
         //desabilita o campo
@@ -250,10 +254,49 @@ public class NovoAnuncioActivity extends AppCompatActivity{
         });
 
 
+        publicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validarCampos();
+            }
+        });
 
 
 
 
+
+    }
+
+    private boolean validarCampos() {
+        //Este metodo vai validar os campos da activity
+        Validator validator = new Validator();
+        boolean retorno = true;
+
+        if (!validator.validateNotNull(titulo)){
+            titulo.setError("Título vazio");
+            titulo.setFocusable(true);
+            titulo.requestFocus();
+            retorno = false;
+        }
+        if (!validator.validateNotNull(descricao)){
+            descricao.setError("Descrição vazia");
+            descricao.setFocusable(true);
+            descricao.requestFocus();
+            retorno = false;
+        }
+        if (categoria == false){
+            TextView errorText = (TextView) spinnerCategoria.getSelectedView();
+            errorText.setError("Categoria não selecionada");
+            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+            errorText.setText("Categoria não selecionada");//changes the selected item text to this
+            return false;
+        }
+
+
+
+
+
+        return retorno;
     }
 
     /**DAQUI PARA BAIXO NÃO FOI TESTADO, TEM QUE TESTAR!**/
@@ -378,7 +421,7 @@ public class NovoAnuncioActivity extends AppCompatActivity{
                     }
 
                     //altera a interface
-                    localizaco.setText(usuario.getCidade() + " - " + usuario.getEstado());
+                    localizacao.setText(usuario.getCidade() + " - " + usuario.getEstado());
                     //altera o banco de dados
                     usuario.setId(usuarioFirebase.getUid());
                     usuario.salvar();
@@ -403,6 +446,9 @@ public class NovoAnuncioActivity extends AppCompatActivity{
         //mostrar o alert dialog
         alertDialog.show();
     }
+
+
+
 
 
 }
