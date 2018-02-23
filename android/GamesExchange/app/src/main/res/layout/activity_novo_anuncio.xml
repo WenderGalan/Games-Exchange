@@ -13,8 +13,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content">
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
@@ -34,14 +33,17 @@
                         android:layout_width="130dp"
                         android:layout_height="130dp"
                         android:layout_alignEnd="@+id/textTitulo"
+                        android:layout_alignLeft="@+id/textTitulo"
+                        android:layout_alignParentTop="true"
                         android:layout_alignRight="@+id/textTitulo"
-                        android:layout_below="@+id/textTitulo"
-                        android:layout_marginLeft="5dp"
+                        android:layout_alignStart="@+id/textTitulo"
+                        android:layout_marginLeft="59dp"
                         android:layout_marginRight="5dp"
+                        android:layout_marginStart="59dp"
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
-                        app:civ_border_color="#FF000000"
-                        android:src="@drawable/ic_camera"/>
+                        android:src="@drawable/ic_camera"
+                        app:civ_border_color="#FF000000" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imageViewCircle2"
@@ -100,7 +102,7 @@
             <EditText
                 android:id="@+id/textTitulo"
                 android:layout_width="350dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_below="@+id/horizontalScrollView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
@@ -144,7 +146,7 @@
                 android:paddingRight="5dp" />
 
             <Spinner
-                android:id="@+id/spinnerTipoDeAnuncio"
+                android:id="@+id/spinnerTipo"
                 android:layout_width="350dp"
                 android:layout_height="40dp"
                 android:layout_alignLeft="@+id/textDescricao"
@@ -156,8 +158,70 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp" />
 
+            <Spinner
+                android:id="@+id/spinnerTipoDeAnuncio"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/textDescricao"
+                android:layout_alignStart="@+id/textDescricao"
+                android:layout_below="@+id/spinnerTipo"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/fundo_caixa_texto"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp" />
 
-        </RelativeLayout>
+            <EditText
+                android:id="@+id/textValor"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/spinnerTipoDeAnuncio"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/fundo_caixa_texto"
+                android:hint="@string/preco"
+                android:inputType="numberDecimal"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/branco"
+                android:textColorHint="@color/branco"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/textViewLocalizacao"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/buttonPublicar"
+                android:layout_alignStart="@+id/buttonPublicar"
+                android:layout_below="@id/textValor"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/fundo_caixa_texto"
+                android:gravity="left|center"
+                android:hint="@string/suaLocalizacao"
+                android:onClick="mudarLocalizacao"
+                android:paddingLeft="5dp"
+                android:textColor="@color/branco"
+                android:textColorHint="@color/branco"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/buttonPublicar"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_alignLeft="@+id/textValor"
+                android:layout_alignStart="@+id/textValor"
+                android:layout_below="@+id/textViewLocalizacao"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/fundo_botao"
+                android:text="@string/publicar"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                android:textSize="18sp" />
+
+
+    </RelativeLayout>
 
 
     </ScrollView>

@@ -11,7 +11,6 @@ public final class ListaItens {
 
     private static List<String> listaTipoAnuncio;
     private static List<String> listaCategoria;
-    private static List<String> listaVideogames;
     private static List<String> listaComputadores;
     private static List<String> listaCelulares;
     private static List<String> listaModeloVideoGames;
@@ -27,20 +26,12 @@ public final class ListaItens {
 
     public static List<String> getListaCategoria() {
         listaCategoria = new ArrayList<String>();
-        listaCategoria.add("Videogames");
+        listaCategoria.add("Consoles e acessórios");
+        listaCategoria.add("Jogos");
         listaCategoria.add("Computadores e acessórios");
         listaCategoria.add("Celular e telefonia");
         listaCategoria.add("Categoria");
         return listaCategoria;
-    }
-
-    public static List<String> getListaVideogames() {
-        listaVideogames = new ArrayList<String>();
-        listaVideogames.add("Consoles");
-        listaVideogames.add("Jogos");
-        listaVideogames.add("Acessórios");
-        listaVideogames.add("Tipo");
-        return listaVideogames;
     }
 
     public static List<String> getListaComputadores() {
@@ -88,6 +79,7 @@ public final class ListaItens {
         listaModeloVideoGames.add("Nintendo DS");
         listaModeloVideoGames.add("Game Boy");
         listaModeloVideoGames.add("Outros");
+        listaModeloVideoGames.add("Tipo");
         return listaModeloVideoGames;
     }
 }

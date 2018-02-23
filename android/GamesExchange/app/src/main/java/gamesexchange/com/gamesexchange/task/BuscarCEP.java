@@ -2,10 +2,13 @@ package gamesexchange.com.gamesexchange.task;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.github.gilbertotorrezan.viacep.se.ViaCEPClient;
 import com.github.gilbertotorrezan.viacep.shared.ViaCEPEndereco;
 import java.io.IOException;
+
+import gamesexchange.com.gamesexchange.activities.NovoAnuncioActivity;
 import gamesexchange.com.gamesexchange.model.CEP;
 
 /**

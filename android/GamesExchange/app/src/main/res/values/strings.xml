@@ -131,6 +131,9 @@
     <string name="alterar_senha">Alterar senha</string>
     <string name="alterar_imagem">Clique na imagem para alterar</string>
     <string name="tipoDeAnuncio">Tipo de Anúncio</string>
+    <string name="preco">Preço (R$)</string>
+    <string name="publicar">Publicar</string>
+    <string name="suaLocalizacao">Sua Localização</string>
 
 
 </resources>
