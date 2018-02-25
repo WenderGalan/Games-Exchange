@@ -9,8 +9,13 @@ public class Anuncio {
 	private String dataDaInsercao;
 	private String horarioDaInsercao;
 	private int contadorDenuncia;
-	//private Location localizacao; //=> Localiza��o de onde foi postado o an�ncio;
 	private int visitas;
+	private String cep;
+	private String estado;
+	private String cidade;
+
+
+
 	/**
 	 * ATRIBUTO - PRIORIDADE
 	 * O atributo prioridade a principio para todo anuncio irá receber 0, sendo:

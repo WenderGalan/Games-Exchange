@@ -43,6 +43,7 @@ dependencies {
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.github.gilberto-torrezan:viacep:1.2.0'
+    compile 'com.google.android.gms:play-services:11.6.2'
 
 }
 
