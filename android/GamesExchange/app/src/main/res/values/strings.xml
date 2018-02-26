@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Games Exchange</string>
 
+
     <string name="facebook_app_id">773201052881607</string>
     <string name="fb_login_protocol_scheme">fb773201052881607</string>
-
     <string name="digiteSeuNome">Digite seu nome</string>
     <string name="nome">Nome:</string>
     <string name="digiteSeuEmail">Digite seu email</string>

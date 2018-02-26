@@ -1,7 +1,6 @@
 package gamesexchange.com.gamesexchange.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.io.Serializable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import gamesexchange.com.gamesexchange.R;
@@ -69,7 +66,7 @@ public class UsuarioFragment extends Fragment{
         //configurando o layout
         nome = view.findViewById(R.id.textViewNomePerfil);
         email = view.findViewById(R.id.textViewEmailPerfil);
-        imagem = view.findViewById(R.id.imageViewCirclePerfil);
+        imagem = view.findViewById(R.id.imageCircleViewAdapter);
         listaMeusAnuncios = view.findViewById(R.id.listViewMeusAnuncios);
 
         //Recuperando o usuario

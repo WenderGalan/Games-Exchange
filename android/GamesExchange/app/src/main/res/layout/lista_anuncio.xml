@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteY="25dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageCircleViewAdapter"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_camera"
+        app:civ_border_color="#FFFFFF"
+        app:civ_border_width="1dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTituloAdapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/imageCircleViewAdapter"
+        android:layout_toRightOf="@+id/imageCircleViewAdapter"
+        android:paddingLeft="5dp"
+        android:text="AQUI VAI FICAR O TÍTULO"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/textViewCidadeDateAdapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageCircleViewAdapter"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/imageCircleViewAdapter"
+        android:layout_toRightOf="@+id/imageCircleViewAdapter"
+        android:paddingStart="5dp"
+        android:text="Campo Grande - 26/02 às 12:12"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/textViewValorTrocaAdapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewCidadeDateAdapter"
+        android:layout_marginBottom="11dp"
+        android:layout_toEndOf="@+id/imageCircleViewAdapter"
+        android:layout_toRightOf="@+id/imageCircleViewAdapter"
+        android:paddingStart="5dp"
+        android:text="R$ 230 - TROCA"
+        android:textColor="@color/azulForte"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

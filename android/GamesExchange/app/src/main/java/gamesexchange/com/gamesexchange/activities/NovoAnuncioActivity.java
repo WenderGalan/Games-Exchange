@@ -41,7 +41,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -55,6 +57,7 @@ import gamesexchange.com.gamesexchange.model.Anuncio;
 import gamesexchange.com.gamesexchange.model.CEP;
 import gamesexchange.com.gamesexchange.model.Usuario;
 import gamesexchange.com.gamesexchange.task.BuscarCEP;
+import gamesexchange.com.gamesexchange.util.Base64Custom;
 import gamesexchange.com.gamesexchange.util.Validator;
 
 public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -300,7 +303,94 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
             public void onClick(View view) {
                 //valida todos os campos
                 validarCampos();
+                //seta os campos
+                anuncio.setTitulo(titulo.getText().toString());
+                anuncio.setDescricao(descricao.getText().toString());
+                anuncio.setContadorDenuncia(0);
+                anuncio.setPrioridade(0);
+                anuncio.setVisitas(0);
 
+                //divide a sring pelos espaços
+                String[] tags = titulo.getText().toString().split(" ");
+                String resultado = null;
+                //percorre o vetor de strings concatenando com virgulas
+                for (String tag : tags){
+                     resultado += tag + ",";
+                }
+                //seta as tags
+                anuncio.setTags(resultado);
+
+                /**SETAR A HORA E A DATA ATUAL**/
+                Calendar c = Calendar.getInstance();
+                int ano = c.get(Calendar.YEAR);
+                int mes = c.get(Calendar.MONTH)+1;
+                int dia = c.get(Calendar.DAY_OF_MONTH);
+                int hora = c.get(Calendar.HOUR_OF_DAY);
+                int minuto = c.get(Calendar.MINUTE);
+
+                anuncio.setDataDaInsercao(dia + "/" + mes + "/" + ano);
+                anuncio.setHorarioDaInsercao(hora + ":" + minuto);
+
+                /**
+                 * cria o id => É o título em base64Custom + o UID do usuário, ou seja,
+                 * não se pode criar dois anúncios iguais com o mesmo usuario!
+                 */
+                anuncio.setId(Base64Custom.codificarBase64(titulo.getText().toString()) + idUsuario);
+
+                //verifica se o tipo do anuncio possui valor
+                if (valor){
+                    anuncio.setValor(preco.getText().toString());
+                }else{
+                    anuncio.setValor("");
+                }
+
+                Log.i("DEBUG", "ID: " + anuncio.getId());
+                Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
+                Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
+                Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
+                Log.i("DEBUG", "VALOR: " + anuncio.getValor());
+                Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
+                Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
+                Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
+                Log.i("DEBUG", "TAGS: " + anuncio.getTags());
+                Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
+                Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
+                Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
+                Log.i("DEBUG", "CEP: " + anuncio.getCep());
+                Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
+                Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
+                //Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
+
+                //Seleciona as imagens e imprimi se tiver algo na seleção
+                if (imagesEncodedList != null){
+                    for (String s : imagesEncodedList){
+                        Log.i("DEBUG", "IMAGEM: " + s.toString());
+                    }
+                }
+
+                /**Tratar a inserção das imagens e também coloca-las**/
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
+                builder.setTitle("Aumentar a Exposição");
+                builder.setMessage("Deseja aumentar a exposição do seu anúncio apenas assistindo a um vídeo?");
+
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //chamar
+
+                    }
+                });
+
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
             }
         });
@@ -427,6 +517,8 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         }
     }
 
+    /**ATE AQUI NÃO FOI TESTADO**/
+
     public void mudarLocalizacao(View view) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(NovoAnuncioActivity.this);
         //definindo um titulo
@@ -505,7 +597,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         alertDialog.show();
     }
 
-
     //Caso o usuario não aceite a permissao para acessar a localização do mesmo
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -525,17 +616,13 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
         builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+            public void onClick(DialogInterface dialogInterface, int i) {finish();
             }
         });
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
-
     }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -573,10 +660,21 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
             }
 
             if (objCEP != null) {
-                usuario.setEstado(objCEP.getUf());
-                usuario.setCidade(objCEP.getLocalidade());
-                usuario.setCep(objCEP.getCep());
-                usuario.salvar();
+                //altera a localização do usuário se ele não tiver nenhuma informação de localização
+                if (usuario.getCep() == null){
+                    usuario.setEstado(objCEP.getUf());
+                    usuario.setCidade(objCEP.getLocalidade());
+                    usuario.setCep(objCEP.getCep());
+                    usuario.salvar();
+                }else{
+                    //altera apenas o anuncio
+                    anuncio.setCep(objCEP.getCep());
+                    anuncio.setCidade(objCEP.getLocalidade());
+                    anuncio.setEstado(objCEP.getUf());
+                }
+
+
+
             }
 
             /**SETAR AS INFORMACOES DOS ANUNCIOS PARA A LOCALIZACAO DO ANUNCIO FICAR NELE E NAO NO USUARIO**/

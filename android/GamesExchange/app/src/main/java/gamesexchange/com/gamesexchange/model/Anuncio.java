@@ -1,21 +1,30 @@
 package gamesexchange.com.gamesexchange.model;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+
+import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
+
 public class Anuncio {
-	private String imagens [];
+	private String id;
+	private String imagens;
 	private String titulo;
 	private String descricao;
 	private String tipo;
 	private String categoria;
 	private String dataDaInsercao;
 	private String horarioDaInsercao;
+	private String tags;
+	private String valor;
 	private int contadorDenuncia;
 	private int visitas;
 	private String cep;
 	private String estado;
 	private String cidade;
-
-
-
 	/**
 	 * ATRIBUTO - PRIORIDADE
 	 * O atributo prioridade a principio para todo anuncio irá receber 0, sendo:
@@ -35,14 +44,8 @@ public class Anuncio {
 	public int getcontadorDenuncia() {
 		return contadorDenuncia;
 	}
-	public void setcontadorDenuncia(int contadorDenuncia) {
+	public void setContadorDenuncia(int contadorDenuncia) {
 		this.contadorDenuncia = contadorDenuncia;
-	}
-	public String[] getImagens() {
-		return imagens;
-	}
-	public void setImagens(String[] imagens) {
-		this.imagens = imagens;
 	}
 	public String getTitulo() {
 		return titulo;
@@ -92,5 +95,59 @@ public class Anuncio {
 	public void setPrioridade(int prioridade) {
 		this.prioridade = prioridade;
 	}
-	
+	public int getContadorDenuncia() {
+		return contadorDenuncia;
+	}
+	public String getCep() {
+		return cep;
+	}
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	public String getCidade() {
+		return cidade;
+	}
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getImagens() {
+		return imagens;
+	}
+	public void setImagens(String imagens) {
+		this.imagens = imagens;
+	}
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+	public String getValor() {
+		return valor;
+	}
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
+
+	public void salvar(){
+		DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
+		referenciaFirebase.child("anuncios").child(getId()).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+			@Override
+			public void onComplete(@NonNull Task<Void> task) {
+				Log.i("DEBUG", "Anúncio salvo com sucesso");
+			}
+		});
+	}
 }
