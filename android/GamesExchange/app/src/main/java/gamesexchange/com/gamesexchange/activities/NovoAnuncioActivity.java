@@ -19,12 +19,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,11 +37,17 @@ import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -79,13 +88,13 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private Spinner spinnerTipoDeAnuncio;
     private Spinner spinnerCategoria;
     private Spinner spinnerTipo;
-    private List<String> imagesEncodedList;
-    private String imageEncoded;
+    private List<Uri> imagens;
     private List<String> listaTipoAnuncio;
     private List<String> listaCategoria;
     private List<String> listaTipo;
     private String[] permissoesNecessarias = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
     private GoogleApiClient googleApiClient;
+    private static final int GALLERY_INTENT = 2;
 
     /**Se for falso terá que pedir ao usuario para escolher**/
     private boolean categoria = true;
@@ -120,6 +129,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
         //inicializa o objeto
         anuncio = new Anuncio();
+        imagens = new ArrayList<Uri>();
 
         //resgata o usuario ativo
         usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao().getCurrentUser();
@@ -149,6 +159,8 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
                     //Tentando conexão com o Google API. Se a tentativa for bem sucessidade, o método onConnected() será chamado, senão, o método onConnectionFailed() será chamado.
                     googleApiClient.connect();
+                    //reconecta para ter certeza q salvou tudo
+                    googleApiClient.reconnect();
 
 
                 }
@@ -159,11 +171,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                 Log.i("DEBUG", "Erro ao construir o usuário!");
             }
         });
-
-
-        //desabilita o campo
-        //descricao.setEnabled(false);
-
 
         /**configuracao do Spinner Categoria**/
         spinnerCategoria = findViewById(R.id.spinnerCategoria);
@@ -276,15 +283,47 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                 if (resultado.equals(listaTipoAnuncio.get(0).toString())) {
                     //selecionou Venda
                     preco.setVisibility(View.VISIBLE);
+                    tipoDeAnuncio = true;
                     valor = true;
+                    anuncio.setTipoAnuncio("Venda");
+                    //ajustar o layout
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
+                    lp.setMargins(0, 15, 0, 0);
+                    lp.addRule(RelativeLayout.BELOW, preco.getId());
+                    lp.addRule(RelativeLayout.ALIGN_START, publicar.getId());
+                    lp.addRule(RelativeLayout.ALIGN_END, publicar.getId());
+                    lp.addRule(RelativeLayout.ALIGN_LEFT, publicar.getId());
+                    localizacao.setLayoutParams(lp);
+
                 } else if (resultado.equals(listaTipoAnuncio.get(1).toString())) {
                     //selecionou Troca
                     preco.setVisibility(View.INVISIBLE);
+                    tipoDeAnuncio = true;
                     valor = false;
+                    anuncio.setTipoAnuncio("Troca");
+                    //ajustar o layout
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
+                    lp.setMargins(0, 15, 0, 0);
+                    lp.addRule(RelativeLayout.BELOW, spinnerTipoDeAnuncio.getId());
+                    lp.addRule(RelativeLayout.ALIGN_START, publicar.getId());
+                    lp.addRule(RelativeLayout.ALIGN_END, publicar.getId());
+                    lp.addRule(RelativeLayout.ALIGN_LEFT, publicar.getId());
+                    localizacao.setLayoutParams(lp);
+
                 } else if (resultado.equals(listaTipoAnuncio.get(2).toString())) {
                     //selecionou Troca e Venda
                     preco.setVisibility(View.VISIBLE);
+                    tipoDeAnuncio = true;
                     valor = true;
+                    anuncio.setTipoAnuncio("Troca & Venda");
+                    //ajustar o layout
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 120);
+                    lp.setMargins(0, 15, 0, 0);
+                    lp.addRule(RelativeLayout.BELOW, preco.getId());
+                    lp.addRule(RelativeLayout.ALIGN_START, publicar.getId());
+                    lp.addRule(RelativeLayout.ALIGN_END, publicar.getId());
+                    lp.addRule(RelativeLayout.ALIGN_LEFT, publicar.getId());
+                    localizacao.setLayoutParams(lp);
                 } else if (resultado.equals(listaTipoAnuncio.get(3).toString())) {
                     tipoDeAnuncio = false;
                     valor = false;
@@ -302,96 +341,95 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
             @Override
             public void onClick(View view) {
                 //valida todos os campos
-                validarCampos();
-                //seta os campos
-                anuncio.setTitulo(titulo.getText().toString());
-                anuncio.setDescricao(descricao.getText().toString());
-                anuncio.setContadorDenuncia(0);
-                anuncio.setPrioridade(0);
-                anuncio.setVisitas(0);
+                if (validarCampos()){
+                    //seta os campos
+                    anuncio.setTitulo(titulo.getText().toString());
+                    anuncio.setDescricao(descricao.getText().toString());
+                    anuncio.setContadorDenuncia(0);
+                    anuncio.setPrioridade(0);
+                    anuncio.setVisitas(0);
 
-                //divide a sring pelos espaços
-                String[] tags = titulo.getText().toString().split(" ");
-                String resultado = null;
-                //percorre o vetor de strings concatenando com virgulas
-                for (String tag : tags){
-                     resultado += tag + ",";
-                }
-                //seta as tags
-                anuncio.setTags(resultado);
-
-                /**SETAR A HORA E A DATA ATUAL**/
-                Calendar c = Calendar.getInstance();
-                int ano = c.get(Calendar.YEAR);
-                int mes = c.get(Calendar.MONTH)+1;
-                int dia = c.get(Calendar.DAY_OF_MONTH);
-                int hora = c.get(Calendar.HOUR_OF_DAY);
-                int minuto = c.get(Calendar.MINUTE);
-
-                anuncio.setDataDaInsercao(dia + "/" + mes + "/" + ano);
-                anuncio.setHorarioDaInsercao(hora + ":" + minuto);
-
-                /**
-                 * cria o id => É o título em base64Custom + o UID do usuário, ou seja,
-                 * não se pode criar dois anúncios iguais com o mesmo usuario!
-                 */
-                anuncio.setId(Base64Custom.codificarBase64(titulo.getText().toString()) + idUsuario);
-
-                //verifica se o tipo do anuncio possui valor
-                if (valor){
-                    anuncio.setValor(preco.getText().toString());
-                }else{
-                    anuncio.setValor("");
-                }
-
-                Log.i("DEBUG", "ID: " + anuncio.getId());
-                Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
-                Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
-                Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
-                Log.i("DEBUG", "VALOR: " + anuncio.getValor());
-                Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
-                Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
-                Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
-                Log.i("DEBUG", "TAGS: " + anuncio.getTags());
-                Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
-                Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
-                Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
-                Log.i("DEBUG", "CEP: " + anuncio.getCep());
-                Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
-                Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
-                //Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
-
-                //Seleciona as imagens e imprimi se tiver algo na seleção
-                if (imagesEncodedList != null){
-                    for (String s : imagesEncodedList){
-                        Log.i("DEBUG", "IMAGEM: " + s.toString());
+                    //divide a sring pelos espaços
+                    String[] tags = titulo.getText().toString().split(" ");
+                    String resultado = null;
+                    //percorre o vetor de strings concatenando com virgulas
+                    for (String tag : tags){
+                        if (resultado == null){
+                            resultado = tag + ",";
+                        }else{
+                            resultado += tag + ",";
+                        }
                     }
+                    //seta as tags
+                    anuncio.setTags(resultado);
+
+                    /**SETAR A HORA E A DATA ATUAL**/
+                    Calendar c = Calendar.getInstance();
+                    int ano = c.get(Calendar.YEAR);
+                    int mes = c.get(Calendar.MONTH)+1;
+                    int dia = c.get(Calendar.DAY_OF_MONTH);
+                    int hora = c.get(Calendar.HOUR_OF_DAY);
+                    int minuto = c.get(Calendar.MINUTE);
+
+                    anuncio.setDataDaInsercao(dia + "/" + mes + "/" + ano);
+                    anuncio.setHorarioDaInsercao(hora + ":" + minuto);
+
+                    /**
+                     * cria o id => É o título em base64Custom + o UID do usuário, ou seja,
+                     * não se pode criar dois anúncios iguais com o mesmo usuario!
+                     */
+                    anuncio.setId(Base64Custom.codificarBase64(titulo.getText().toString()) + idUsuario);
+
+                    //verifica se o tipo do anuncio possui valor
+                    if (valor){
+                        anuncio.setValor(preco.getText().toString());
+                    }else{
+                        anuncio.setValor("");
+                    }
+
+                    Log.i("DEBUG", "ID: " + anuncio.getId());
+                    Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
+                    Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
+                    Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
+                    Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
+                    Log.i("DEBUG", "TIPO DE ANUNCIO: " + anuncio.getTipoAnuncio());
+                    Log.i("DEBUG", "VALOR: " + anuncio.getValor());
+                    Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
+                    Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
+                    Log.i("DEBUG", "TAGS: " + anuncio.getTags());
+                    Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
+                    Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
+                    Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
+                    Log.i("DEBUG", "CEP: " + anuncio.getCep());
+                    Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
+                    Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
+                    //Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
+
+
+                    /**Tratar a inserção das imagens e também coloca-las**/
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
+                    builder.setTitle("Aumentar a Exposição");
+                    builder.setMessage("Deseja aumentar a exposição do seu anúncio apenas assistindo a um vídeo?");
+
+                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //chamar
+
+                        }
+                    });
+
+                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
-
-                /**Tratar a inserção das imagens e também coloca-las**/
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
-                builder.setTitle("Aumentar a Exposição");
-                builder.setMessage("Deseja aumentar a exposição do seu anúncio apenas assistindo a um vídeo?");
-
-                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //chamar
-
-                    }
-                });
-
-                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
             }
         });
 
@@ -447,77 +485,29 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         return retorno;
     }
 
-    /**DAQUI PARA BAIXO NÃO FOI TESTADO, TEM QUE TESTAR!**/
-
     public void adicionarImagem(View view) {
         //adiciona imagem no novo anuncio
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_INTENT);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            // When an Image is picked
-            if (requestCode == 1 && resultCode == RESULT_OK && null != data) {
-                // Get the Image from data
-
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                imagesEncodedList = new ArrayList<String>();
-                if (data.getData() != null) {
-
-                    Uri mImageUri = data.getData();
-
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(mImageUri, filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imageEncoded = cursor.getString(columnIndex);
-                    cursor.close();
-
-                } else {
-                    if (data.getClipData() != null) {
-                        ClipData mClipData = data.getClipData();
-                        ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
-                        for (int i = 0; i < mClipData.getItemCount(); i++) {
-
-                            ClipData.Item item = mClipData.getItemAt(i);
-                            Uri uri = item.getUri();
-                            mArrayUri.add(uri);
-                            // Get the cursor
-                            Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
-                            // Move to first row
-                            cursor.moveToFirst();
-
-                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                            imageEncoded = cursor.getString(columnIndex);
-                            imagesEncodedList.add(imageEncoded);
-                            cursor.close();
-
-                        }
-                        Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Você não escolheu a(s) imagem(ns)", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Algo deu errado", Toast.LENGTH_LONG).show();
-        }
-
         super.onActivityResult(requestCode, resultCode, data);
 
-        for (String s : imagesEncodedList) {
-            Log.i("DEBUG", "Caminho da Imagem: " + s.toUpperCase());
-        }
-    }
+        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
 
-    /**ATE AQUI NÃO FOI TESTADO**/
+            imagens.add(data.getData());
+
+            Picasso.with(NovoAnuncioActivity.this).load(imagens.get(0)).into(imagem1);
+
+
+        }
+
+    }
 
     public void mudarLocalizacao(View view) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(NovoAnuncioActivity.this);
@@ -666,12 +656,12 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     usuario.setCidade(objCEP.getLocalidade());
                     usuario.setCep(objCEP.getCep());
                     usuario.salvar();
-                }else{
-                    //altera apenas o anuncio
-                    anuncio.setCep(objCEP.getCep());
-                    anuncio.setCidade(objCEP.getLocalidade());
-                    anuncio.setEstado(objCEP.getUf());
                 }
+
+                //altera as informacoes do anuncio
+                anuncio.setCep(objCEP.getCep());
+                anuncio.setCidade(objCEP.getLocalidade());
+                anuncio.setEstado(objCEP.getUf());
 
 
 
@@ -702,8 +692,10 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
     public void pararConexaoComGoogleApi() {
         //Verificando se está conectado para então cancelar a conexão!
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
+        if (googleApiClient != null){
+            if (googleApiClient.isConnected()) {
+                googleApiClient.disconnect();
+            }
         }
     }
 

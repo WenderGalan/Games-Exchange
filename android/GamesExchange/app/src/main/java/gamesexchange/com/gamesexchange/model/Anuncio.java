@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 
@@ -15,6 +16,7 @@ public class Anuncio {
 	private String titulo;
 	private String descricao;
 	private String tipo;
+	private String tipoAnuncio;
 	private String categoria;
 	private String dataDaInsercao;
 	private String horarioDaInsercao;
@@ -41,9 +43,6 @@ public class Anuncio {
 	}
 	
 	/**GETTERS AND SETTERS**/
-	public int getcontadorDenuncia() {
-		return contadorDenuncia;
-	}
 	public void setContadorDenuncia(int contadorDenuncia) {
 		this.contadorDenuncia = contadorDenuncia;
 	}
@@ -139,6 +138,12 @@ public class Anuncio {
 	}
 	public void setValor(String valor) {
 		this.valor = valor;
+	}
+	public String getTipoAnuncio() {
+		return tipoAnuncio;
+	}
+	public void setTipoAnuncio(String tipoAnuncio) {
+		this.tipoAnuncio = tipoAnuncio;
 	}
 
 	public void salvar(){

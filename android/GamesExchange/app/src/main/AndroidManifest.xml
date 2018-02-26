@@ -53,7 +53,8 @@
             android:name=".activities.AnuncioDetalheActivity"
             android:label="@string/title_activity_anuncio_detalhe"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.NovoAnuncioActivity" />
+        <activity android:name=".activities.NovoAnuncioActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".activities.ConfiguracoesActivity" />
         <activity android:name=".activities.EditarPerfilActivity"
             android:windowSoftInputMode="stateHidden"></activity>
