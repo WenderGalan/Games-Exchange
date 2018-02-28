@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import gamesexchange.com.gamesexchange.R;
 import gamesexchange.com.gamesexchange.activities.ConfiguracoesActivity;
 import gamesexchange.com.gamesexchange.activities.EditarPerfilActivity;
 import gamesexchange.com.gamesexchange.activities.LoginActivity;
+import gamesexchange.com.gamesexchange.activities.SobreActivity;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.model.Usuario;
 
@@ -47,6 +49,7 @@ public class UsuarioFragment extends Fragment{
     private DatabaseReference firebase;
     private String idUsuario;
     private Usuario usuario;
+    private ImageView editarPerfil;
 
     public UsuarioFragment() {
         // Required empty public constructor
@@ -68,6 +71,7 @@ public class UsuarioFragment extends Fragment{
         email = view.findViewById(R.id.textViewEmailPerfil);
         imagem = view.findViewById(R.id.imageCircleViewAdapter);
         listaMeusAnuncios = view.findViewById(R.id.listViewMeusAnuncios);
+        editarPerfil = view.findViewById(R.id.imageButtonEditarPerfil);
 
         //Recuperando o usuario
         usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao().getCurrentUser();
@@ -106,6 +110,13 @@ public class UsuarioFragment extends Fragment{
             }
         });
 
+        editarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirEditarPerfil();
+            }
+        });
+
         //Setar o list view aqui
 
 
@@ -134,12 +145,34 @@ public class UsuarioFragment extends Fragment{
            case R.id.action_configuracoes:
                abrirConfiguracoes();
                return true;
+           case R.id.action_compartilhar:
+               compartilharApp();
+               return true;
            case R.id.action_editar_perfil:
                abrirEditarPerfil();
+               return true;
+           case R.id.action_sobre:
+               abrirSobre();
                return true;
            default:
                return super.onOptionsItemSelected(item);
        }
+    }
+
+    private void abrirSobre() {
+        Intent intent = new Intent(getActivity(), SobreActivity.class);
+        intent.putExtra("usuario", usuario);
+        startActivity(intent);
+    }
+
+    private void compartilharApp() {
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Games Exchange - Convite para conhecer");
+        String link = "https://www.google.com.br";
+        intent.putExtra(Intent.EXTRA_TEXT, "Seu amigo está te convidando a conhecer esse aplicativo de TROCA/VENDA de jogos, consoles, computadores e muito mais! Baixe agora mesmo na PlayStore: " + link);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        startActivity(intent);
     }
 
     private void abrirConfiguracoes() {
@@ -163,4 +196,5 @@ public class UsuarioFragment extends Fragment{
         intent.putExtra("usuario", usuario);
         startActivity(intent);
     }
+
 }

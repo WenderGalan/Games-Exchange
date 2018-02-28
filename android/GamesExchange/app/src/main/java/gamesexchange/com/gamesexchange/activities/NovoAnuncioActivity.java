@@ -1,17 +1,14 @@
 package gamesexchange.com.gamesexchange.activities;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,7 +16,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,20 +33,14 @@ import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -75,11 +65,11 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private Usuario usuario;
     private DatabaseReference firebase;
     private FirebaseUser usuarioFirebase;
+    private CircleImageView imagem0;
     private CircleImageView imagem1;
     private CircleImageView imagem2;
     private CircleImageView imagem3;
     private CircleImageView imagem4;
-    private CircleImageView imagem5;
     private EditText titulo;
     private EditText descricao;
     private EditText preco;
@@ -95,6 +85,8 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private String[] permissoesNecessarias = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
     private GoogleApiClient googleApiClient;
     private static final int GALLERY_INTENT = 2;
+    private String imageEncoded;
+    private ArrayList<Uri> imagesEncodedList = new ArrayList<Uri>();
 
     /**Se for falso terá que pedir ao usuario para escolher**/
     private boolean categoria = true;
@@ -109,16 +101,16 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.activity_novo_anuncio);
 
         //Imagens resgatadas
-        imagem1 = findViewById(R.id.imageViewCircle1);
-        imagem2 = findViewById(R.id.imageViewCircle2);
-        imagem3 = findViewById(R.id.imageViewCircle3);
-        imagem4 = findViewById(R.id.imageViewCircle4);
-        imagem5 = findViewById(R.id.imageViewCircle5);
+        imagem0 = findViewById(R.id.imageViewCircle1);
+        imagem1 = findViewById(R.id.imageViewCircle2);
+        imagem2 = findViewById(R.id.imageViewCircle3);
+        imagem3 = findViewById(R.id.imageViewCircle4);
+        imagem4 = findViewById(R.id.imageViewCircle5);
 
+        /*imagem1.setEnabled(false);
         imagem2.setEnabled(false);
         imagem3.setEnabled(false);
-        imagem4.setEnabled(false);
-        imagem5.setEnabled(false);
+        imagem4.setEnabled(false);*/
 
         //atributos resgatados
         titulo = findViewById(R.id.textTitulo);
@@ -496,15 +488,43 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        try {
+                if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK && null != data) {
+                    if(data.getData()!=null){
+
+                        Uri mImageUri = data.getData();
+                        imagesEncodedList.add(mImageUri);
+
+                    }
+                }
+            }catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
+
+        Log.i("DEBUG", "Image Encoded List: " + imagesEncodedList.size() );
+
         super.onActivityResult(requestCode, resultCode, data);
+        Picasso.with(NovoAnuncioActivity.this).load(imageEncoded).into(imagem0);
 
-        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
+        if (imagesEncodedList != null){
+            int qtd = imagesEncodedList.size();
+            Log.i("DEBUG", "imagem1: " + imagesEncodedList.get(0));
+            for (int i = 0 ; i < qtd ; i++){
+                String imagem  = imagesEncodedList.get(i).toString();
+                if (i == 0){
+                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem0);
+                }else if (i == 1){
+                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem1);
+                }else if (i == 2){
+                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem2);
+                }else if (i == 3){
+                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem3);
+                }else if (i == 4){
+                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem4);
+                }
 
-            imagens.add(data.getData());
-
-            Picasso.with(NovoAnuncioActivity.this).load(imagens.get(0)).into(imagem1);
-
-
+            }
         }
 
     }

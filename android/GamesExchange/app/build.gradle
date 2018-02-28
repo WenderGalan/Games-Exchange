@@ -44,8 +44,10 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.github.gilberto-torrezan:viacep:1.2.0'
     compile 'com.google.android.gms:play-services:11.6.2'
+    compile 'com.github.dimorinny:floating-text-button:0.0.4'
 
 }
+
 
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

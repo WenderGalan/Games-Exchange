@@ -31,7 +31,7 @@ public class AnuncioDetalheActivity extends AppCompatActivity implements BaseSli
         slider = findViewById(R.id.slider);
         /*toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("HD Samsung 2 Terá USB 3.0 - NOVO");
-        setSupportActionBar(toolbar);*/
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +40,7 @@ public class AnuncioDetalheActivity extends AppCompatActivity implements BaseSli
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
 
 
@@ -72,7 +72,7 @@ public class AnuncioDetalheActivity extends AppCompatActivity implements BaseSli
         //onde fica o indicador de imagens
         slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Top);
         slider.setCustomAnimation(new DescriptionAnimation());
-        slider.setDuration(4000);
+        slider.setDuration(3000);
 
 
     }

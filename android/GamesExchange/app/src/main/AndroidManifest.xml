@@ -3,7 +3,6 @@
     package="gamesexchange.com.gamesexchange">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -25,7 +24,7 @@
         <!-- NÀO DEIXA LEVANTAR A ACTIVITY - SUBIR A TABS DE BAIXO (ADJUSTPAN|ADJUSTNOTHING) -->
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustPan|adjustNothing|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|adjustNothing|stateHidden" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -53,11 +52,14 @@
             android:name=".activities.AnuncioDetalheActivity"
             android:label="@string/title_activity_anuncio_detalhe"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.NovoAnuncioActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".activities.NovoAnuncioActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity android:name=".activities.ConfiguracoesActivity" />
-        <activity android:name=".activities.EditarPerfilActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".activities.EditarPerfilActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activities.SobreActivity"></activity>
     </application>
 
 </manifest>

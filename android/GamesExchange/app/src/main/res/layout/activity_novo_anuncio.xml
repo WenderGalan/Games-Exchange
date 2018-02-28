@@ -37,9 +37,10 @@
                         android:layout_alignParentTop="true"
                         android:layout_alignRight="@+id/textTitulo"
                         android:layout_alignStart="@+id/textTitulo"
-                        android:layout_marginLeft="59dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginStart="59dp"
+                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
                         android:src="@drawable/ic_camera"
@@ -56,7 +57,7 @@
                         android:layout_weight="1"
                         android:onClick="adicionarImagem"
                         android:src="@drawable/ic_camera"
-                        app:civ_border_color="#FF000000"/>
+                        app:civ_border_color="#FF000000" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imageViewCircle3"

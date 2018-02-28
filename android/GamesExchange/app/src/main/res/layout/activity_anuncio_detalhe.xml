@@ -27,8 +27,7 @@
                 android:id="@+id/slider"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:layout_gravity="center"
-                />
+                android:layout_gravity="center" />
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -36,7 +35,9 @@
 
     <include
         layout="@layout/content_anuncio_detalhe"
+        android:layout_width="wrap_content"
         android:layout_height="549dp"
+        android:layout_marginTop="200dp"
         tools:layout_editor_absoluteY="198dp" />
 
     <android.support.design.widget.FloatingActionButton

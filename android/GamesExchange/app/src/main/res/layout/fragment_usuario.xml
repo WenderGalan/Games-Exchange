@@ -30,15 +30,16 @@
                 android:textColor="@color/branco" />
 
             <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:id="@+id/imageButtonEditarPerfil"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="22dp"
-                android:layout_marginRight="22dp"
-                android:src="@drawable/ic_edit_user" />
+                android:layout_alignTop="@+id/imageCircleViewAdapter"
+                android:layout_marginEnd="23dp"
+                android:layout_marginRight="23dp"
+                android:src="@drawable/ic_edit_user"
+                android:visibility="invisible" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageCircleViewAdapter"

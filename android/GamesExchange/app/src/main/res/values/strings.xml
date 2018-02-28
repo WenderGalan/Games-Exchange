@@ -134,6 +134,10 @@
     <string name="preco">Preço (R$)</string>
     <string name="publicar">Publicar</string>
     <string name="suaLocalizacao">Sua Localização</string>
+    <string name="compartilhar">Compartilhar</string>
+    <string name="sobre">Sobre</string>
+    <string name="email">EMAIL</string>
+    <string name="ligar">LIGAR</string>
 
 
 </resources>
