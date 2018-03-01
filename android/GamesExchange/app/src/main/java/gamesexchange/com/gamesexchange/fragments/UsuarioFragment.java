@@ -33,6 +33,7 @@ import gamesexchange.com.gamesexchange.activities.EditarPerfilActivity;
 import gamesexchange.com.gamesexchange.activities.LoginActivity;
 import gamesexchange.com.gamesexchange.activities.SobreActivity;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
+import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Usuario;
 
 /**
@@ -49,6 +50,7 @@ public class UsuarioFragment extends Fragment{
     private DatabaseReference firebase;
     private String idUsuario;
     private Usuario usuario;
+    private Ajuda ajuda;
     private ImageView editarPerfil;
 
     public UsuarioFragment() {
@@ -78,6 +80,9 @@ public class UsuarioFragment extends Fragment{
         idUsuario = usuarioFirebase.getUid();
 
         firebase = ConfiguracaoFirebase.getFirebase().child("usuarios").child(idUsuario);
+
+        //recuperar objeto ajuda
+        recuperarAjuda();
 
         //listener para o usuario
         firebase.addValueEventListener(new ValueEventListener() {
@@ -161,18 +166,40 @@ public class UsuarioFragment extends Fragment{
 
     private void abrirSobre() {
         Intent intent = new Intent(getActivity(), SobreActivity.class);
-        intent.putExtra("usuario", usuario);
+        intent.putExtra("ajuda", ajuda);
         startActivity(intent);
     }
 
     private void compartilharApp() {
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SUBJECT, "Games Exchange - Convite para conhecer");
-        String link = "https://www.google.com.br";
-        intent.putExtra(Intent.EXTRA_TEXT, "Seu amigo está te convidando a conhecer esse aplicativo de TROCA/VENDA de jogos, consoles, computadores e muito mais! Baixe agora mesmo na PlayStore: " + link);
+
+        if (usuario.getNome() != null && ajuda != null){
+            intent.putExtra(Intent.EXTRA_TEXT, usuario.getNome() + ajuda.getMensagemCompartilhar() + ajuda.getLinkApp() );
+        }else{
+            if (ajuda.getMensagemCompartilhar() != null && ajuda.getLinkApp() != null){
+                intent.putExtra(Intent.EXTRA_TEXT,ajuda.getMensagemCompartilhar() + ajuda.getLinkApp());
+            }
+        }
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
         startActivity(intent);
+    }
+
+    private void recuperarAjuda(){
+        DatabaseReference referencia = ConfiguracaoFirebase.getFirebase().child("ajuda");
+        referencia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("DEBUG", "Carregou a ajuda");
+                ajuda = dataSnapshot.getValue(Ajuda.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("DEBUG", "Não carregou a ajuda");
+            }
+        });
     }
 
     private void abrirConfiguracoes() {

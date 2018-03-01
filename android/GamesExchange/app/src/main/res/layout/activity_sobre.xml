@@ -1,33 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal|bottom"
-    android:gravity="center"
-    android:layout_marginBottom="10dp"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
-    <ru.dimorinny.floatingtextbutton.FloatingTextButton
-        android:id="@+id/floatingButtonTextLigar"
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="103dp"
+        app:srcCompat="@drawable/ic_launcher_gg" />
+
+    <TextView
+        android:id="@+id/textViewRelease"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        app:floating_background_color="@color/colorPrimary"
-        app:floating_left_icon="@drawable/ic_phone"
-        app:floating_title="@string/ligar"
-        app:floating_title_color="@android:color/white" />
+        android:layout_alignTop="@+id/imageView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="186dp"
+        android:text="release"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <ru.dimorinny.floatingtextbutton.FloatingTextButton
-        android:id="@+id/floatingButtonTextEmail"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        app:floating_background_color="@color/colorPrimary"
-        app:floating_left_icon="@drawable/ic_email"
-        app:floating_title="@string/email"
-        app:floating_title_color="@android:color/white" />
+        android:layout_above="@+id/textView6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/desenvolvido"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:onClick="abrirWebSite"
+        android:text="@string/webSiteDesenvolvedor"
+        android:textAlignment="center"
+        android:textColor="@color/azulForte"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewRelease"
+        android:layout_centerHorizontal="true"
+        android:text="@string/info"
+        android:textAlignment="center"
+        android:textColor="@android:color/black" />
+</RelativeLayout>

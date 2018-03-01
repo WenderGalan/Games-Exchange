@@ -97,8 +97,19 @@
                         android:onClick="adicionarImagem"
                         app:civ_border_color="#FF000000"
                         android:src="@drawable/ic_camera"/>
+
                 </LinearLayout>
             </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/textViewInformacao"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textTitulo"
+                android:layout_alignStart="@+id/textTitulo"
+                android:layout_below="@+id/horizontalScrollView"
+                android:text="@string/infodois"
+                android:textAlignment="center" />
 
             <EditText
                 android:id="@+id/textTitulo"
@@ -106,7 +117,7 @@
                 android:layout_height="40dp"
                 android:layout_below="@+id/horizontalScrollView"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/fundo_caixa_texto"
                 android:hint="@string/titulo"
                 android:paddingEnd="5dp"

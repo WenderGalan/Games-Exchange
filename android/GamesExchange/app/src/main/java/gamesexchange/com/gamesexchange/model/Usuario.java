@@ -25,9 +25,8 @@ public class Usuario implements Serializable, Cloneable{
 	private String estado;
 	private String email;
 	private String senha;
-	private String foto; //URL da imagem
+	private String foto;
 	private int anunciosRemovidos;
-	//private Location lastLocation; //objeto localiza��o do usu�rio
 	
 	/**CONSTRUTOR**/
 	public Usuario() {

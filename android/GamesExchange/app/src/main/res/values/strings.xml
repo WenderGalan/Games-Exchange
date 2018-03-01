@@ -138,6 +138,11 @@
     <string name="sobre">Sobre</string>
     <string name="email">EMAIL</string>
     <string name="ligar">LIGAR</string>
+    <string name="desenvolvido">Desenvolvido por Wender Galan Benage</string>
+    <string name="webSiteDesenvolvedor">http://wendergalan.com</string>
+    <string name="info">Comprar e negociar seus games e acessórios nunca foi tão fácil</string>
+    <string name="info2">Por favor selecione uma imagem de cada vez</string>
+    <string name="infodois">Por favor selecione uma imagem de cada vez</string>
 
 
 </resources>

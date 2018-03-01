@@ -494,7 +494,12 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     if(data.getData()!=null){
 
                         Uri mImageUri = data.getData();
-                        imagesEncodedList.add(mImageUri);
+                        //somente 5 imagens selecionadas
+                        if (imagesEncodedList.size() == 5){
+                            imagesEncodedList.add(mImageUri);
+                        }else{
+                            //ja foi selecionada as 5 imagens
+                        }
 
                     }
                 }
@@ -509,7 +514,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
         if (imagesEncodedList != null){
             int qtd = imagesEncodedList.size();
-            Log.i("DEBUG", "imagem1: " + imagesEncodedList.get(0));
             for (int i = 0 ; i < qtd ; i++){
                 String imagem  = imagesEncodedList.get(i).toString();
                 if (i == 0){
@@ -525,6 +529,10 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                 }
 
             }
+        }
+
+        for (Uri image : imagesEncodedList){
+            Log.i("DEBUG", "Imagem: " + image.toString());
         }
 
     }
