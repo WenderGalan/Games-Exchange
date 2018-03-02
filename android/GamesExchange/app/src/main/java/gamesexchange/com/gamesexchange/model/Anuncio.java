@@ -11,7 +11,7 @@ import com.google.firebase.database.Exclude;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 
 public class Anuncio {
-	private String id;
+	private int id;
 	private String imagens;
 	private String titulo;
 	private String descricao;
@@ -115,10 +115,10 @@ public class Anuncio {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getImagens() {
@@ -148,7 +148,7 @@ public class Anuncio {
 
 	public void salvar(){
 		DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
-		referenciaFirebase.child("anuncios").child(getId()).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+		referenciaFirebase.child("anuncios").child(Integer.toString(getId())).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				Log.i("DEBUG", "Anúncio salvo com sucesso");

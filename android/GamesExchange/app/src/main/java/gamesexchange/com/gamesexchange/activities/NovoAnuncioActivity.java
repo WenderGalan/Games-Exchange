@@ -52,6 +52,7 @@ import gamesexchange.com.gamesexchange.adapter.HintAdapter;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.config.ListaItens;
 import gamesexchange.com.gamesexchange.helper.Permissao;
+import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Anuncio;
 import gamesexchange.com.gamesexchange.model.CEP;
 import gamesexchange.com.gamesexchange.model.Usuario;
@@ -68,8 +69,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private CircleImageView imagem0;
     private CircleImageView imagem1;
     private CircleImageView imagem2;
-    private CircleImageView imagem3;
-    private CircleImageView imagem4;
     private EditText titulo;
     private EditText descricao;
     private EditText preco;
@@ -87,6 +86,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private static final int GALLERY_INTENT = 2;
     private String imageEncoded;
     private ArrayList<Uri> imagesEncodedList = new ArrayList<Uri>();
+    private Ajuda ajuda;
 
     /**Se for falso terá que pedir ao usuario para escolher**/
     private boolean categoria = true;
@@ -104,13 +104,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         imagem0 = findViewById(R.id.imageViewCircle1);
         imagem1 = findViewById(R.id.imageViewCircle2);
         imagem2 = findViewById(R.id.imageViewCircle3);
-        imagem3 = findViewById(R.id.imageViewCircle4);
-        imagem4 = findViewById(R.id.imageViewCircle5);
-
-        /*imagem1.setEnabled(false);
-        imagem2.setEnabled(false);
-        imagem3.setEnabled(false);
-        imagem4.setEnabled(false);*/
 
         //atributos resgatados
         titulo = findViewById(R.id.textTitulo);
@@ -122,6 +115,10 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         //inicializa o objeto
         anuncio = new Anuncio();
         imagens = new ArrayList<Uri>();
+        ajuda = new Ajuda();
+
+        //recupera a ajuda
+        recuperarAjuda();
 
         //resgata o usuario ativo
         usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao().getCurrentUser();
@@ -136,8 +133,11 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                 Log.i("DEBUG", "Usuário construido com sucesso!");
 
                 //seta a localização do usuario
-                if (usuario.getCidade() != null && usuario.getEstado() != null) {
+                if (usuario.getCidade() != null && usuario.getEstado() != null && usuario.getCep() != null) {
                     localizacao.setText(usuario.getCidade() + " - " + usuario.getEstado());
+                    anuncio.setCep(usuario.getCep());
+                    anuncio.setCidade(usuario.getCidade());
+                    anuncio.setEstado(usuario.getEstado());
                 } else {
                     //solicita a permissao
                     Permissao.validaPermissoes(1, NovoAnuncioActivity.this, permissoesNecessarias);
@@ -176,7 +176,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
         /**configuracao do Spinner tipo**/
         spinnerTipo = findViewById(R.id.spinnerTipo);
-
 
         //abrir outro spinner com o tipo desejado
         spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -328,7 +327,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
             }
         });
 
-
         publicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -366,41 +364,24 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     anuncio.setDataDaInsercao(dia + "/" + mes + "/" + ano);
                     anuncio.setHorarioDaInsercao(hora + ":" + minuto);
 
-                    /**
-                     * cria o id => É o título em base64Custom + o UID do usuário, ou seja,
-                     * não se pode criar dois anúncios iguais com o mesmo usuario!
-                     */
-                    anuncio.setId(Base64Custom.codificarBase64(titulo.getText().toString()) + idUsuario);
-
-                    //verifica se o tipo do anuncio possui valor
+                    /**verifica se o tipo do anuncio possui valor**/
                     if (valor){
                         anuncio.setValor(preco.getText().toString());
                     }else{
                         anuncio.setValor("");
                     }
 
-                    Log.i("DEBUG", "ID: " + anuncio.getId());
-                    Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
-                    Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
-                    Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
-                    Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
-                    Log.i("DEBUG", "TIPO DE ANUNCIO: " + anuncio.getTipoAnuncio());
-                    Log.i("DEBUG", "VALOR: " + anuncio.getValor());
-                    Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
-                    Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
-                    Log.i("DEBUG", "TAGS: " + anuncio.getTags());
-                    Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
-                    Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
-                    Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
-                    Log.i("DEBUG", "CEP: " + anuncio.getCep());
-                    Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
-                    Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
-                    //Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
-
-
                     /**Tratar a inserção das imagens e também coloca-las**/
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
+
+
+
+
+                    /**
+                     * PERGUNTAR SE O USUARIO DESEJA ASSISTIR
+                     * UM ANUNCIO PARA AUMENTAR A PRIORIDADE DO ANUNCIO
+                     * */
+                    /*AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
                     builder.setTitle("Aumentar a Exposição");
                     builder.setMessage("Deseja aumentar a exposição do seu anúncio apenas assistindo a um vídeo?");
 
@@ -420,7 +401,53 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     });
 
                     AlertDialog dialog = builder.create();
-                    dialog.show();
+                    dialog.show();*/
+
+
+
+
+
+
+
+
+
+
+
+                    /**
+                     * CONFIGURAR O ID DO ANUNCIO
+                     * */
+                     int idAnuncio = 0;
+                     try {
+                         String aux = ajuda.getContadorDeAnuncios();
+                         idAnuncio = Integer.parseInt(aux);
+                         idAnuncio += 1;
+                         ajuda.setContadorDeAnuncios(Integer.toString(idAnuncio));
+                         ajuda.salvar();
+                         
+                     }catch(Exception e){
+                         e.printStackTrace();
+                     }
+
+                    anuncio.setId(idAnuncio);
+
+                    Log.i("DEBUG", "ID: " + anuncio.getId());
+                    Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
+                    Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
+                    Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
+                    Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
+                    Log.i("DEBUG", "TIPO DE ANUNCIO: " + anuncio.getTipoAnuncio());
+                    Log.i("DEBUG", "VALOR: " + anuncio.getValor());
+                    Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
+                    Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
+                    Log.i("DEBUG", "TAGS: " + anuncio.getTags());
+                    Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
+                    Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
+                    Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
+                    Log.i("DEBUG", "CEP: " + anuncio.getCep());
+                    Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
+                    Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
+                    //Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
+
                 }
             }
         });
@@ -495,22 +522,21 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
                         Uri mImageUri = data.getData();
                         //somente 5 imagens selecionadas
-                        if (imagesEncodedList.size() == 5){
+                        if (imagesEncodedList.size() < 3){
                             imagesEncodedList.add(mImageUri);
                         }else{
                             //ja foi selecionada as 5 imagens
+                            Toast.makeText(this, "Já foram selecionadas 3 imagens", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 }
             }catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Alguma coisa deu errado :/", Toast.LENGTH_LONG).show();
         }
 
-        Log.i("DEBUG", "Image Encoded List: " + imagesEncodedList.size() );
 
         super.onActivityResult(requestCode, resultCode, data);
-        Picasso.with(NovoAnuncioActivity.this).load(imageEncoded).into(imagem0);
 
         if (imagesEncodedList != null){
             int qtd = imagesEncodedList.size();
@@ -522,19 +548,10 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem1);
                 }else if (i == 2){
                     Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem2);
-                }else if (i == 3){
-                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem3);
-                }else if (i == 4){
-                    Picasso.with(NovoAnuncioActivity.this).load(imagem).into(imagem4);
                 }
 
             }
         }
-
-        for (Uri image : imagesEncodedList){
-            Log.i("DEBUG", "Imagem: " + image.toString());
-        }
-
     }
 
     public void mudarLocalizacao(View view) {
@@ -725,6 +742,21 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                 googleApiClient.disconnect();
             }
         }
+    }
+
+    private void recuperarAjuda(){
+        DatabaseReference referencia = ConfiguracaoFirebase.getFirebase().child("ajuda");
+        referencia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ajuda = dataSnapshot.getValue(Ajuda.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("DEBUG", "Não carregou a ajuda");
+            }
+        });
     }
 
 }

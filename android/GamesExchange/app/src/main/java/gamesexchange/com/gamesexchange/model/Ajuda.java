@@ -20,6 +20,7 @@ public class Ajuda implements Serializable, Cloneable{
     private String release;
     private String mensagemCompartilhar;
     private String linkApp;
+    private String contadorDeAnuncios;
 
     public Ajuda(){
 
@@ -42,6 +43,14 @@ public class Ajuda implements Serializable, Cloneable{
     }
     public void setLinkApp(String linkApp) {
         this.linkApp = linkApp;
+    }
+
+    public String getContadorDeAnuncios() {
+        return contadorDeAnuncios;
+    }
+
+    public void setContadorDeAnuncios(String contadorDeAnuncios) {
+        this.contadorDeAnuncios = contadorDeAnuncios;
     }
 
     public void salvar(){

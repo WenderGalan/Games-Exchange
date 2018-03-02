@@ -191,7 +191,6 @@ public class UsuarioFragment extends Fragment{
         referencia.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("DEBUG", "Carregou a ajuda");
                 ajuda = dataSnapshot.getValue(Ajuda.class);
             }
 
