@@ -1,6 +1,7 @@
 package gamesexchange.com.gamesexchange.activities;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,11 +34,14 @@ import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -55,6 +59,7 @@ import gamesexchange.com.gamesexchange.helper.Permissao;
 import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Anuncio;
 import gamesexchange.com.gamesexchange.model.CEP;
+import gamesexchange.com.gamesexchange.model.MeusAnuncios;
 import gamesexchange.com.gamesexchange.model.Usuario;
 import gamesexchange.com.gamesexchange.task.BuscarCEP;
 import gamesexchange.com.gamesexchange.util.Base64Custom;
@@ -87,6 +92,9 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private String imageEncoded;
     private ArrayList<Uri> imagesEncodedList = new ArrayList<Uri>();
     private Ajuda ajuda;
+    private MeusAnuncios meusAnuncios;
+    private ProgressDialog progressDialog;
+    private String imagensURL;
 
     /**Se for falso terá que pedir ao usuario para escolher**/
     private boolean categoria = true;
@@ -116,6 +124,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         anuncio = new Anuncio();
         imagens = new ArrayList<Uri>();
         ajuda = new Ajuda();
+        meusAnuncios = new MeusAnuncios();
 
         //recupera a ajuda
         recuperarAjuda();
@@ -373,7 +382,83 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
                     /**Tratar a inserção das imagens e também coloca-las**/
 
+                    progressDialog.setMessage("Inserindo anúncio...");
+                    progressDialog.show();
 
+                    for (int i = 0 ; i < imagesEncodedList.size() ;  i++){
+                        inserirImagem(i);
+                    }
+
+                    //seta a string com as urls das imagens inseridas no storage
+                    anuncio.setImagens(imagensURL);
+
+                    /**
+                     * CONFIGURAR O ID DO ANUNCIO
+                     * */
+                    int idAnuncio = 0;
+                    try {
+                        String aux = ajuda.getContadorDeAnuncios();
+                        idAnuncio = Integer.parseInt(aux);
+                        idAnuncio += 1;
+                        ajuda.setContadorDeAnuncios(Integer.toString(idAnuncio));
+                        ajuda.salvar();
+
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                    anuncio.setId(idAnuncio);
+
+                    //finaliza o progress bar
+                    progressDialog.dismiss();
+
+                    Log.i("DEBUG", "ID: " + anuncio.getId());
+                    Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
+                    Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
+                    Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
+                    Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
+                    Log.i("DEBUG", "TIPO DE ANUNCIO: " + anuncio.getTipoAnuncio());
+                    Log.i("DEBUG", "VALOR: " + anuncio.getValor());
+                    Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
+                    Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
+                    Log.i("DEBUG", "TAGS: " + anuncio.getTags());
+                    Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
+                    Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
+                    Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
+                    Log.i("DEBUG", "CEP: " + anuncio.getCep());
+                    Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
+                    Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
+                    Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
+
+                    /**
+                     * INSERE O ANUNCIO NO BANCO MEUS ANUNCIOS PARA FACILITAR A PESQUISA DO MESMO
+                     * **/
+
+                    DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("meusanuncios").child(usuario.getId());
+                    reference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot != null){
+                                //pega os ids existentes e adiciona o novo
+                                Log.i("DEBUG", "Meus Anuncios recuperado com sucesso;");
+                                meusAnuncios = dataSnapshot.getValue(MeusAnuncios.class);
+                                String id += "," + anuncio.getId();
+
+
+
+
+
+                            }else{
+                                //insere um novo anuncio
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
 
@@ -413,40 +498,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
 
 
-                    /**
-                     * CONFIGURAR O ID DO ANUNCIO
-                     * */
-                     int idAnuncio = 0;
-                     try {
-                         String aux = ajuda.getContadorDeAnuncios();
-                         idAnuncio = Integer.parseInt(aux);
-                         idAnuncio += 1;
-                         ajuda.setContadorDeAnuncios(Integer.toString(idAnuncio));
-                         ajuda.salvar();
-                         
-                     }catch(Exception e){
-                         e.printStackTrace();
-                     }
 
-                    anuncio.setId(idAnuncio);
-
-                    Log.i("DEBUG", "ID: " + anuncio.getId());
-                    Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
-                    Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
-                    Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
-                    Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
-                    Log.i("DEBUG", "TIPO DE ANUNCIO: " + anuncio.getTipoAnuncio());
-                    Log.i("DEBUG", "VALOR: " + anuncio.getValor());
-                    Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
-                    Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
-                    Log.i("DEBUG", "TAGS: " + anuncio.getTags());
-                    Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
-                    Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
-                    Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
-                    Log.i("DEBUG", "CEP: " + anuncio.getCep());
-                    Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
-                    Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
-                    //Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
 
                 }
             }
@@ -759,4 +811,19 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         });
     }
 
+    private void inserirImagem(int position){
+        StorageReference storageRef = ConfiguracaoFirebase.getStorage();
+        //Cada usuario tem uma pasta com seu UID e dentro tem duas pastas com sua foto de perfil e a foto de seus anuncios
+        StorageReference imagem = storageRef.child(usuario.getId() + "/" + "anuncios/" + imagesEncodedList.get(position).getLastPathSegment());
+        //upa a imagem ao storage
+        UploadTask uploadTask = imagem.putFile(imagesEncodedList.get(position));
+        //Listener para verificar o estado da task de upload
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                imagensURL = imagensURL + "," + downloadUrl.toString();
+            }
+        });
+    }
 }
