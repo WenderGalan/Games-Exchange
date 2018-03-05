@@ -17,6 +17,7 @@ O projeto Games Exchange foi idelizado por [Wender Galan] (wendergalan.com) para
   - AdMob
   - Monitoramento de desempenho
 - [Facebook SDK](https://developers.facebook.com)
+- [Floating Text Button](https://github.com/dimorinny/floating-text-button)
   
 
 ### Condições de uso, política de privacidade e normas de publicação
@@ -62,7 +63,8 @@ Próximas Releases:
 **- 1.0 Versão Inicial** 
   - Postagem, alteração, e exclusão de anúncios.
   - Cadastro, login, e alteração de usuários. 
-  - Compartilhamento do app 
-  - Configurações de usuário 
-  - Armazenamento de preferências
-  - Validação de campos e de dados
+  - Compartilhamento do app.
+  - Configurações de usuário.
+  - Armazenamento de preferências.
+  - Validação de campos e de dados.
+  - Busca por texto.
