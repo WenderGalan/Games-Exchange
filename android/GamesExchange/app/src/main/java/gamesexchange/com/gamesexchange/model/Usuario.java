@@ -27,6 +27,7 @@ public class Usuario implements Serializable, Cloneable{
 	private String senha;
 	private String foto;
 	private int anunciosRemovidos;
+	private String meusAnuncios;
 	
 	/**CONSTRUTOR**/
 	public Usuario() {
@@ -88,6 +89,14 @@ public class Usuario implements Serializable, Cloneable{
 	}
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getMeusAnuncios() {
+		return meusAnuncios;
+	}
+
+	public void setMeusAnuncios(String meusAnuncios) {
+		this.meusAnuncios = meusAnuncios;
 	}
 
 	public String getCep() {

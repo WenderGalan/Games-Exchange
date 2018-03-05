@@ -1,6 +1,7 @@
 package gamesexchange.com.gamesexchange.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,8 +13,8 @@ import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.multidex.MultiDex;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -59,10 +60,8 @@ import gamesexchange.com.gamesexchange.helper.Permissao;
 import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Anuncio;
 import gamesexchange.com.gamesexchange.model.CEP;
-import gamesexchange.com.gamesexchange.model.MeusAnuncios;
 import gamesexchange.com.gamesexchange.model.Usuario;
 import gamesexchange.com.gamesexchange.task.BuscarCEP;
-import gamesexchange.com.gamesexchange.util.Base64Custom;
 import gamesexchange.com.gamesexchange.util.Validator;
 
 public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -92,9 +91,10 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private String imageEncoded;
     private ArrayList<Uri> imagesEncodedList = new ArrayList<Uri>();
     private Ajuda ajuda;
-    private MeusAnuncios meusAnuncios;
     private ProgressDialog progressDialog;
     private String imagensURL;
+    private AlertDialog alerta;
+
 
     /**Se for falso terá que pedir ao usuario para escolher**/
     private boolean categoria = true;
@@ -107,6 +107,9 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_anuncio);
+
+        //Alert Dialog config
+        MultiDex.install (NovoAnuncioActivity.this);
 
         //Imagens resgatadas
         imagem0 = findViewById(R.id.imageViewCircle1);
@@ -124,7 +127,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         anuncio = new Anuncio();
         imagens = new ArrayList<Uri>();
         ajuda = new Ajuda();
-        meusAnuncios = new MeusAnuncios();
 
         //recupera a ajuda
         recuperarAjuda();
@@ -382,6 +384,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
                     /**Tratar a inserção das imagens e também coloca-las**/
 
+                    progressDialog = new ProgressDialog(NovoAnuncioActivity.this);
                     progressDialog.setMessage("Inserindo anúncio...");
                     progressDialog.show();
 
@@ -409,8 +412,23 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
                     anuncio.setId(idAnuncio);
 
-                    //finaliza o progress bar
-                    progressDialog.dismiss();
+                    /**
+                     * INSERE O ANUNCIO NO BANCO MEUS ANUNCIOS PARA FACILITAR A PESQUISA DO MESMO
+                     * RESGATA OS IDS JÁ CRIADOS E CONCATENA COM OS NOVOS
+                     * **/
+                    String aux = null;
+                    if (usuario.getMeusAnuncios() == null){
+                        usuario.setMeusAnuncios(String.valueOf(anuncio.getId()));
+                    }else{
+                        String id = usuario.getMeusAnuncios();
+                        aux = id + "," + anuncio.getId();
+                        usuario.setMeusAnuncios(aux);
+                    }
+                    //salva o usuario
+                    usuario.salvar();
+
+                    //salva o anuncio
+                    anuncio.salvar();
 
                     Log.i("DEBUG", "ID: " + anuncio.getId());
                     Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
@@ -430,50 +448,21 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
                     Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
 
-                    /**
-                     * INSERE O ANUNCIO NO BANCO MEUS ANUNCIOS PARA FACILITAR A PESQUISA DO MESMO
-                     * **/
-
-                    DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("meusanuncios").child(usuario.getId());
-                    reference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot != null){
-                                //pega os ids existentes e adiciona o novo
-                                Log.i("DEBUG", "Meus Anuncios recuperado com sucesso;");
-                                meusAnuncios = dataSnapshot.getValue(MeusAnuncios.class);
-                                String id += "," + anuncio.getId();
-
-
-
-
-
-                            }else{
-                                //insere um novo anuncio
-
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
+                    //finaliza o progress bar
+                    progressDialog.dismiss();
 
                     /**
                      * PERGUNTAR SE O USUARIO DESEJA ASSISTIR
                      * UM ANUNCIO PARA AUMENTAR A PRIORIDADE DO ANUNCIO
                      * */
-                    /*AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
                     builder.setTitle("Aumentar a Exposição");
                     builder.setMessage("Deseja aumentar a exposição do seu anúncio apenas assistindo a um vídeo?");
 
                     builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            //chamar
+
 
                         }
                     });
@@ -485,20 +474,8 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                         }
                     });
 
-                    AlertDialog dialog = builder.create();
-                    dialog.show();*/
-
-
-
-
-
-
-
-
-
-
-
-
+                    alerta = builder.create();
+                    alerta.show();
 
                 }
             }
@@ -822,8 +799,24 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 final Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                imagensURL = imagensURL + "," + downloadUrl.toString();
+                if (imagensURL != null){
+                    imagensURL = imagensURL + "," + downloadUrl.toString();
+                }else{
+                    imagensURL = downloadUrl.toString();
+                }
+                anuncio.setImagens(imagensURL);
+                anuncio.salvar();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
