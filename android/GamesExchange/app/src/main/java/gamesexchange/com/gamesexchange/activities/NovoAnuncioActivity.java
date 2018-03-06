@@ -91,7 +91,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private String[] permissoesNecessarias = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
     private GoogleApiClient googleApiClient;
     private static final int GALLERY_INTENT = 2;
-    private String imageEncoded;
     private ArrayList<Uri> imagesEncodedList = new ArrayList<Uri>();
     private Ajuda ajuda;
     private ProgressDialog progressDialog;
@@ -110,9 +109,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_anuncio);
-
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.admob_intercalar));
 
         //Alert Dialog config
         MultiDex.install (NovoAnuncioActivity.this);
@@ -133,6 +129,10 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
         anuncio = new Anuncio();
         imagens = new ArrayList<Uri>();
         ajuda = new Ajuda();
+        progressDialog = new ProgressDialog(NovoAnuncioActivity.this);
+        progressDialog.setTitle("Inserindo o anúncio");
+        progressDialog.setMessage("Carregando...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
         //recupera a ajuda
         recuperarAjuda();
@@ -349,6 +349,8 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
             public void onClick(View view) {
                 //valida todos os campos
                 if (validarCampos()){
+                    progressDialog.show();
+
                     //seta os campos
                     anuncio.setTitulo(titulo.getText().toString());
                     anuncio.setDescricao(descricao.getText().toString());
@@ -390,9 +392,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
                     /**Tratar a inserção das imagens e também coloca-las**/
 
-                    progressDialog = new ProgressDialog(NovoAnuncioActivity.this);
-                    progressDialog.setMessage("Inserindo anúncio...");
-                    progressDialog.show();
+
 
                     for (int i = 0 ; i < imagesEncodedList.size() ;  i++){
                         inserirImagem(i);
@@ -458,16 +458,39 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     progressDialog.dismiss();
 
                     //chama o anuncio intercalar
-                    loadIntercalar();
+                    interstitialAd = new InterstitialAd(NovoAnuncioActivity.this);
+                    interstitialAd.setAdUnitId(getString(R.string.admob_intercalar));
+                    interstitialAd.loadAd(new AdRequest.Builder().build());
                     interstitialAd.setAdListener(new AdListener(){
                         @Override
                         public void onAdClosed() {
                             super.onAdClosed();
-                            //avisa que o anuncio foi inserido com sucesso
-                            Toast.makeText(NovoAnuncioActivity.this, "O anúncio foi inserido com sucesso", Toast.LENGTH_LONG).show();
                             finish();
+                            Toast.makeText(NovoAnuncioActivity.this, "O anúncio foi inserido com sucesso", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onAdLoaded() {
+                            interstitialAd.show();
+                        }
+
+                        @Override
+                        public void onAdFailedToLoad(int i) {
+                            super.onAdFailedToLoad(i);
+                            if (i == 0){
+                                Log.i("DEBUG", "Erro interno");
+                            }else if (i == 1){
+                                Log.i("DEBUG", "Erro request");
+                            }else if (i == 2){
+                                Log.i("DEBUG", "Erro rede");
+                            }else if (i == 3){
+                                Log.i("DEBUG", "Erro fill");
+                            }
                         }
                     });
+
+
+
                 }
             }
         });
@@ -475,10 +498,6 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
-    private void loadIntercalar() {
-        AdRequest interAdRequest = new AdRequest.Builder().build();
-        interstitialAd.loadAd(interAdRequest);
-    }
 
     private boolean validarCampos() {
         //Este metodo vai validar os campos da activity
