@@ -32,6 +32,9 @@ import android.widget.Toast;
 
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -93,7 +96,7 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     private Ajuda ajuda;
     private ProgressDialog progressDialog;
     private String imagensURL;
-    private AlertDialog alerta;
+    private InterstitialAd interstitialAd;
 
 
     /**Se for falso terá que pedir ao usuario para escolher**/
@@ -107,6 +110,9 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_anuncio);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.admob_intercalar));
 
         //Alert Dialog config
         MultiDex.install (NovoAnuncioActivity.this);
@@ -451,37 +457,27 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     //finaliza o progress bar
                     progressDialog.dismiss();
 
-                    /**
-                     * PERGUNTAR SE O USUARIO DESEJA ASSISTIR
-                     * UM ANUNCIO PARA AUMENTAR A PRIORIDADE DO ANUNCIO
-                     * */
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NovoAnuncioActivity.this);
-                    builder.setTitle("Aumentar a Exposição");
-                    builder.setMessage("Deseja aumentar a exposição do seu anúncio apenas assistindo a um vídeo?");
-
-                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    //chama o anuncio intercalar
+                    loadIntercalar();
+                    interstitialAd.setAdListener(new AdListener(){
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-
+                        public void onAdClosed() {
+                            super.onAdClosed();
+                            //avisa que o anuncio foi inserido com sucesso
+                            Toast.makeText(NovoAnuncioActivity.this, "O anúncio foi inserido com sucesso", Toast.LENGTH_LONG).show();
+                            finish();
                         }
                     });
-
-                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-
-                    alerta = builder.create();
-                    alerta.show();
-
                 }
             }
         });
 
 
+    }
+
+    private void loadIntercalar() {
+        AdRequest interAdRequest = new AdRequest.Builder().build();
+        interstitialAd.loadAd(interAdRequest);
     }
 
     private boolean validarCampos() {
