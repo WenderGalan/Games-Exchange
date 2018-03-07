@@ -8,9 +8,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
+
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 
-public class Anuncio {
+public class Anuncio implements Serializable, Cloneable{
 	private int id;
 	private String imagens;
 	private String titulo;

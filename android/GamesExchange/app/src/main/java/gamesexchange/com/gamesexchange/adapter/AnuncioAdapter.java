@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -63,6 +65,10 @@ public class AnuncioAdapter extends ArrayAdapter<Anuncio> {
             valorTroca.setText(valorOuTroca);
 
             /**TEM QUE SETAR A IMAGEM**/
+            String[] imagens = anuncio.getImagens().split(",");
+            if (imagens[0] != null){
+                Picasso.with(getContext()).load(imagens[0]).into(imagemPrincipal);
+            }
 
         }
         return view;

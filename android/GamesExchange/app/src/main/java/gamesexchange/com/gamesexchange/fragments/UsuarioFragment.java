@@ -13,9 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.Toolbar;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,14 +28,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import gamesexchange.com.gamesexchange.R;
+import gamesexchange.com.gamesexchange.activities.AnuncioDetalheActivity;
 import gamesexchange.com.gamesexchange.activities.ConfiguracoesActivity;
 import gamesexchange.com.gamesexchange.activities.EditarPerfilActivity;
 import gamesexchange.com.gamesexchange.activities.LoginActivity;
 import gamesexchange.com.gamesexchange.activities.SobreActivity;
+import gamesexchange.com.gamesexchange.adapter.AnuncioAdapter;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.model.Ajuda;
+import gamesexchange.com.gamesexchange.model.Anuncio;
 import gamesexchange.com.gamesexchange.model.Usuario;
 
 /**
@@ -52,6 +60,7 @@ public class UsuarioFragment extends Fragment{
     private Usuario usuario;
     private Ajuda ajuda;
     private ImageView editarPerfil;
+    private ArrayList<Anuncio> meusAnuncios;
 
     public UsuarioFragment() {
         // Required empty public constructor
@@ -122,7 +131,45 @@ public class UsuarioFragment extends Fragment{
             }
         });
 
+        //Resgata os anuncios do usuario
+        meusAnuncios = new ArrayList<Anuncio>();
+        final String[] idAnuncios = usuario.getMeusAnuncios().split(",");
+        for (int i = 0 ; i < idAnuncios.length ; i++){
+            DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("anuncios");
+            reference.orderByChild("id").equalTo(idAnuncios[i]);
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i("DEBUG", "Carregou o anuncio");
+                    Anuncio anuncio = dataSnapshot.getValue(Anuncio.class);
+                    meusAnuncios.add(anuncio);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.i("DEBUG", "Não encontrou nenhum anúncio com este ID");
+                }
+            });
+        }
+
+        Log.i("DEBUG", "A quantidade de meus anúncios é: " + meusAnuncios.size());
+
         //Setar o list view aqui
+        AnuncioAdapter adapter = new AnuncioAdapter(getContext(), meusAnuncios);
+        listaMeusAnuncios.setAdapter(adapter);
+
+        listaMeusAnuncios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //chamar a activity de detalhes do anuncio com o botao flutuante editar.
+                Intent intent = new Intent(getContext(), AnuncioDetalheActivity.class);
+                //passa o anuncio escolhido como parametro extra
+                intent.putExtra("anuncio", meusAnuncios.get(i));
+
+                Toast.makeText(getContext(), "Clicou no item " + i, Toast.LENGTH_LONG).show();
+            }
+        });
+
 
 
 
