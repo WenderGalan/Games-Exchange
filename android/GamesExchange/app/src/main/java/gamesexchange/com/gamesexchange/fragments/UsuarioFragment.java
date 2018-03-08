@@ -115,9 +115,11 @@ public class UsuarioFragment extends Fragment{
                     }else{
                         Log.i("DEBUG", "O Usuario tem anuncios");
                         idAnuncios = usuario.getMeusAnuncios().split(",");
+                        meusAnuncios.clear();
                         for (int i = 0 ; i < idAnuncios.length ; i++){
                             buscarAnuncio(idAnuncios[i]);
                         }
+
                     }
                 }
                 if (usuario.getFoto()!= null){
@@ -163,9 +165,6 @@ public class UsuarioFragment extends Fragment{
                 Toast.makeText(getContext(), "Clicou no item " + i, Toast.LENGTH_LONG).show();
             }
         });
-
-
-
         return view;
     }
 

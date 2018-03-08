@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AnuncioDetalhesActivity">
+        <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +50,7 @@
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.CadastroActivity" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name=".activities.AnuncioDetalhesActivity"
             android:label="@string/title_activity_anuncio_detalhe"
             android:theme="@style/AppTheme" />
         <activity
