@@ -7,16 +7,15 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="android.support.multidex.MultiDexApplication">
-        <activity android:name=".activities.SplashScreenActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".activities.AnuncioDetalhesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,17 +50,17 @@
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.CadastroActivity" />
         <activity
-            android:name=".activities.AnuncioDetalheActivity"
+            android:name=".activities.SplashScreenActivity"
             android:label="@string/title_activity_anuncio_detalhe"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.NovoAnuncioActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".activities.ConfiguracoesActivity" />
         <activity
             android:name=".activities.EditarPerfilActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.SobreActivity"></activity>
+        <activity android:name=".activities.SobreActivity" />
     </application>
 
 </manifest>

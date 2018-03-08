@@ -9,11 +9,14 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageCircleViewAdapter"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/textViewTituloAdapter"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
         android:src="@drawable/ic_no_camera"
         app:civ_border_color="#FFFFFF"
         app:civ_border_width="1dp"
@@ -29,7 +32,7 @@
         android:layout_toEndOf="@+id/imageCircleViewAdapter"
         android:layout_toRightOf="@+id/imageCircleViewAdapter"
         android:paddingLeft="5dp"
-        android:text="AQUI VAI FICAR O TÍTULO"
+        android:textColor="@android:color/black"
         android:textSize="14sp" />
 
     <TextView
@@ -37,11 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageCircleViewAdapter"
-        android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@+id/imageCircleViewAdapter"
-        android:layout_toRightOf="@+id/imageCircleViewAdapter"
+        android:layout_alignLeft="@+id/textViewTituloAdapter"
+        android:layout_alignStart="@+id/textViewTituloAdapter"
         android:paddingStart="5dp"
-        android:text="Campo Grande - 26/02 às 12:12"
         android:textSize="12sp" />
 
     <TextView
@@ -49,11 +50,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/textViewCidadeDateAdapter"
-        android:layout_marginBottom="11dp"
-        android:layout_toEndOf="@+id/imageCircleViewAdapter"
-        android:layout_toRightOf="@+id/imageCircleViewAdapter"
+        android:layout_alignLeft="@+id/textViewCidadeDateAdapter"
+        android:layout_alignStart="@+id/textViewCidadeDateAdapter"
         android:paddingStart="5dp"
-        android:text="R$ 230 - TROCA"
         android:textColor="@color/azulForte"
         android:textSize="18sp"
         android:textStyle="bold" />

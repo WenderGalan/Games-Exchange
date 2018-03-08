@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,16 +29,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import gamesexchange.com.gamesexchange.R;
-import gamesexchange.com.gamesexchange.activities.AnuncioDetalheActivity;
+import gamesexchange.com.gamesexchange.activities.AnuncioDetalhesActivity;
 import gamesexchange.com.gamesexchange.activities.ConfiguracoesActivity;
 import gamesexchange.com.gamesexchange.activities.EditarPerfilActivity;
 import gamesexchange.com.gamesexchange.activities.LoginActivity;
 import gamesexchange.com.gamesexchange.activities.SobreActivity;
-import gamesexchange.com.gamesexchange.adapter.AnuncioAdapter;
+import gamesexchange.com.gamesexchange.adapter.MeusAnunciosAdapter;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Anuncio;
@@ -61,6 +60,8 @@ public class UsuarioFragment extends Fragment{
     private Ajuda ajuda;
     private ImageView editarPerfil;
     private ArrayList<Anuncio> meusAnuncios;
+    private String[] idAnuncios;
+    private MeusAnunciosAdapter adapter;
 
     public UsuarioFragment() {
         // Required empty public constructor
@@ -76,6 +77,8 @@ public class UsuarioFragment extends Fragment{
         toolbarUsuario.setTitle("Minha Conta");
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbarUsuario);
         setHasOptionsMenu(true);
+
+        meusAnuncios = new ArrayList<Anuncio>();
 
         //configurando o layout
         nome = view.findViewById(R.id.textViewNomePerfil);
@@ -106,6 +109,17 @@ public class UsuarioFragment extends Fragment{
                 if (usuario.getEmail() != null){
                     email.setText(usuario.getEmail());
                 }
+                if (usuario.getMeusAnuncios() != null){
+                    if (usuario.getMeusAnuncios().isEmpty()){
+
+                    }else{
+                        Log.i("DEBUG", "O Usuario tem anuncios");
+                        idAnuncios = usuario.getMeusAnuncios().split(",");
+                        for (int i = 0 ; i < idAnuncios.length ; i++){
+                            buscarAnuncio(idAnuncios[i]);
+                        }
+                    }
+                }
                 if (usuario.getFoto()!= null){
                     try {
                         Picasso.with(getContext()).load(usuario.getFoto()).into(imagem);
@@ -132,37 +146,17 @@ public class UsuarioFragment extends Fragment{
         });
 
         //Resgata os anuncios do usuario
-        meusAnuncios = new ArrayList<Anuncio>();
-        final String[] idAnuncios = usuario.getMeusAnuncios().split(",");
-        for (int i = 0 ; i < idAnuncios.length ; i++){
-            DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("anuncios");
-            reference.orderByChild("id").equalTo(idAnuncios[i]);
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.i("DEBUG", "Carregou o anuncio");
-                    Anuncio anuncio = dataSnapshot.getValue(Anuncio.class);
-                    meusAnuncios.add(anuncio);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.i("DEBUG", "Não encontrou nenhum anúncio com este ID");
-                }
-            });
-        }
-
-        Log.i("DEBUG", "A quantidade de meus anúncios é: " + meusAnuncios.size());
 
         //Setar o list view aqui
-        AnuncioAdapter adapter = new AnuncioAdapter(getContext(), meusAnuncios);
+        adapter = new MeusAnunciosAdapter(getContext(), 0, meusAnuncios);
         listaMeusAnuncios.setAdapter(adapter);
 
         listaMeusAnuncios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //chamar a activity de detalhes do anuncio com o botao flutuante editar.
-                Intent intent = new Intent(getContext(), AnuncioDetalheActivity.class);
+                Intent intent = new Intent(getContext(), AnuncioDetalhesActivity.class);
                 //passa o anuncio escolhido como parametro extra
                 intent.putExtra("anuncio", meusAnuncios.get(i));
 
@@ -172,13 +166,29 @@ public class UsuarioFragment extends Fragment{
 
 
 
-
-
-
-
-
-
         return view;
+    }
+
+    private void buscarAnuncio(String anuncioId){
+        DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("anuncios").child(anuncioId);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null){
+                    Log.i("DEBUG", "Carregou o anuncio");
+                    Anuncio anuncio = dataSnapshot.getValue(Anuncio.class);
+                    meusAnuncios.add(anuncio);
+                    adapter.notifyDataSetChanged();
+                }else{
+                    Log.i("DEBUG", "Não carregou o anuncio");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("DEBUG", "Não encontrou nenhum anúncio com este ID");
+            }
+        });
     }
 
     @Override

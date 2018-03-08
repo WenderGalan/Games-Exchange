@@ -404,13 +404,14 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                     /**
                      * CONFIGURAR O ID DO ANUNCIO
                      * */
-                    int idAnuncio = 0;
+                    String idAnuncio = null;
                     try {
                         String aux = ajuda.getContadorDeAnuncios();
-                        idAnuncio = Integer.parseInt(aux);
-                        idAnuncio += 1;
-                        ajuda.setContadorDeAnuncios(Integer.toString(idAnuncio));
+                        int contador = Integer.parseInt(aux);
+                        contador +=1;
+                        ajuda.setContadorDeAnuncios(Integer.toString(contador));
                         ajuda.salvar();
+                        idAnuncio = String.valueOf(contador);
 
                     }catch(Exception e){
                         e.printStackTrace();

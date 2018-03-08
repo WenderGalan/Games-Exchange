@@ -6,14 +6,13 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 
 public class Anuncio implements Serializable, Cloneable{
-	private int id;
+	private String id;
 	private String imagens;
 	private String titulo;
 	private String descricao;
@@ -117,10 +116,10 @@ public class Anuncio implements Serializable, Cloneable{
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getImagens() {
@@ -150,7 +149,7 @@ public class Anuncio implements Serializable, Cloneable{
 
 	public void salvar(){
 		DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
-		referenciaFirebase.child("anuncios").child(Integer.toString(getId())).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+		referenciaFirebase.child("anuncios").child(getId()).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				Log.i("DEBUG", "Anúncio salvo com sucesso");

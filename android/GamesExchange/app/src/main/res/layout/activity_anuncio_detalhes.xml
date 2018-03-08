@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="gamesexchange.com.gamesexchange.activities.AnuncioDetalheActivity">
+    tools:context="gamesexchange.com.gamesexchange.activities.AnuncioDetalhesActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
+        android:background="@color/azulForte"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -24,30 +25,31 @@
             app:toolbarId="@+id/toolbar">
 
             <com.daimajia.slider.library.SliderLayout
-                android:id="@+id/slider"
+                android:id="@+id/sliderMeuAnuncio"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
                 android:layout_gravity="center" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/content_anuncio_detalhe"
-        android:layout_width="wrap_content"
-        android:layout_height="549dp"
-        android:layout_marginTop="200dp"
-        tools:layout_editor_absoluteY="198dp" />
+    <include layout="@layout/content_anuncio_detalhes" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_phone"
-        android:backgroundTint="@color/colorPrimary"/>
+    <include
+        layout="@layout/content_botoes_flutuantes"
+        android:visibility="visible" />
+
+    <include
+        layout="@layout/content_botao_editar_flutuante"
+        android:visibility="invisible" />
 
 </android.support.design.widget.CoordinatorLayout>
