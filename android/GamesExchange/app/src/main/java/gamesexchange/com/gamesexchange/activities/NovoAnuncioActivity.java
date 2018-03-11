@@ -431,29 +431,15 @@ public class NovoAnuncioActivity extends AppCompatActivity implements GoogleApiC
                         aux = id + "," + anuncio.getId();
                         usuario.setMeusAnuncios(aux);
                     }
+
+                    //salva o UID do usuario
+                    anuncio.setIdUsuario(usuario.getId());
+
                     //salva o usuario
                     usuario.salvar();
 
                     //salva o anuncio
                     anuncio.salvar();
-
-                    Log.i("DEBUG", "ID: " + anuncio.getId());
-                    Log.i("DEBUG", "TITULO: " + anuncio.getTitulo());
-                    Log.i("DEBUG", "DESCRICAO: " + anuncio.getDescricao());
-                    Log.i("DEBUG", "CATEGORIA: " + anuncio.getCategoria());
-                    Log.i("DEBUG", "TIPO: " + anuncio.getTipo());
-                    Log.i("DEBUG", "TIPO DE ANUNCIO: " + anuncio.getTipoAnuncio());
-                    Log.i("DEBUG", "VALOR: " + anuncio.getValor());
-                    Log.i("DEBUG", "DATA: " + anuncio.getDataDaInsercao());
-                    Log.i("DEBUG", "HORA: " + anuncio.getHorarioDaInsercao());
-                    Log.i("DEBUG", "TAGS: " + anuncio.getTags());
-                    Log.i("DEBUG", "DENUNCIAS: " + anuncio.getContadorDenuncia());
-                    Log.i("DEBUG", "VISITAS: " + anuncio.getVisitas());
-                    Log.i("DEBUG", "PRIORIDADE: " + anuncio.getPrioridade());
-                    Log.i("DEBUG", "CEP: " + anuncio.getCep());
-                    Log.i("DEBUG", "CIDADE: " + anuncio.getCidade());
-                    Log.i("DEBUG", "ESTADO: " + anuncio.getEstado());
-                    Log.i("DEBUG", "IMAGENS: " + anuncio.getImagens());
 
                     //finaliza o progress bar
                     progressDialog.dismiss();

@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,11 +32,10 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gamesexchange.com.gamesexchange.R;
 import gamesexchange.com.gamesexchange.activities.AnuncioDetalhesActivity;
-import gamesexchange.com.gamesexchange.activities.ConfiguracoesActivity;
 import gamesexchange.com.gamesexchange.activities.EditarPerfilActivity;
 import gamesexchange.com.gamesexchange.activities.LoginActivity;
 import gamesexchange.com.gamesexchange.activities.SobreActivity;
-import gamesexchange.com.gamesexchange.adapter.MeusAnunciosAdapter;
+import gamesexchange.com.gamesexchange.adapter.AnunciosAdapter;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Anuncio;
@@ -61,16 +59,20 @@ public class UsuarioFragment extends Fragment{
     private ImageView editarPerfil;
     private ArrayList<Anuncio> meusAnuncios;
     private String[] idAnuncios;
-    private MeusAnunciosAdapter adapter;
+    private AnunciosAdapter adapter;
 
     public UsuarioFragment() {
         // Required empty public constructor
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_usuario, container, false);
+
+
         //Configurando a toolbar
         toolbarUsuario = view.findViewById(R.id.toolbar_usuario);
         //toolbarUsuario.setLogo(R.drawable.logo_texto);
@@ -151,7 +153,7 @@ public class UsuarioFragment extends Fragment{
 
 
         //Setar o list view aqui
-        adapter = new MeusAnunciosAdapter(getContext(), 0, meusAnuncios);
+        adapter = new AnunciosAdapter(getContext(), 0, meusAnuncios);
         listaMeusAnuncios.setAdapter(adapter);
 
         listaMeusAnuncios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -161,8 +163,8 @@ public class UsuarioFragment extends Fragment{
                 Intent intent = new Intent(getContext(), AnuncioDetalhesActivity.class);
                 //passa o anuncio escolhido como parametro extra
                 intent.putExtra("anuncio", meusAnuncios.get(i));
-
-                Toast.makeText(getContext(), "Clicou no item " + i, Toast.LENGTH_LONG).show();
+                intent.putExtra("tipo", "meuAnuncio");
+                startActivity(intent);
             }
         });
         return view;
@@ -203,9 +205,9 @@ public class UsuarioFragment extends Fragment{
            case R.id.action_sair:
                deslogarUsuario();
                return true;
-           case R.id.action_configuracoes:
+           /*case R.id.action_configuracoes:
                abrirConfiguracoes();
-               return true;
+               return true;*/
            case R.id.action_compartilhar:
                compartilharApp();
                return true;
@@ -257,11 +259,11 @@ public class UsuarioFragment extends Fragment{
         });
     }
 
-    private void abrirConfiguracoes() {
+    /*private void abrirConfiguracoes() {
         //Abrir a tela de configuracoes
         Intent intent = new Intent(getActivity(), ConfiguracoesActivity.class);
         startActivity(intent);
-    }
+    }*/
 
     private void deslogarUsuario() {
         //desloga o usuario e volta para a tela incial de Login
@@ -278,5 +280,8 @@ public class UsuarioFragment extends Fragment{
         intent.putExtra("usuario", usuario);
         startActivity(intent);
     }
+
+
+
 
 }

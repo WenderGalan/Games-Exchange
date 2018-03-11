@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:text="Valor do Produto"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewValorLinha"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView31"
+        android:layout_alignBottom="@+id/textView31"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:text="R$ 50.00"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/azulForte"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView31"
+        android:layout_alignStart="@+id/textView31"
+        android:layout_below="@+id/textView31"
+        android:text="Categoria"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewCategoriaLinha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView14"
+        android:layout_alignBottom="@+id/textView14"
+        android:layout_alignEnd="@+id/textViewValorLinha"
+        android:layout_alignRight="@+id/textViewValorLinha"
+        android:layout_toEndOf="@+id/textView14"
+        android:layout_toRightOf="@+id/textView14"
+        android:text="TextView"
+        android:textAlignment="viewEnd"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView14"
+        android:layout_alignStart="@+id/textView14"
+        android:layout_below="@+id/textView14"
+        android:layout_marginTop="5dp"
+        android:text="Tipo"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewTipoLinha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView17"
+        android:layout_alignBottom="@+id/textView17"
+        android:layout_alignEnd="@+id/textViewCategoriaLinha"
+        android:layout_alignRight="@+id/textViewCategoriaLinha"
+        android:layout_toEndOf="@+id/textView17"
+        android:layout_toRightOf="@+id/textView17"
+        android:text="TextView"
+        android:textAlignment="viewEnd"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewDescricaoLinha"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignLeft="@+id/textView26"
+        android:layout_alignStart="@+id/textView26"
+        android:layout_below="@+id/textView26"
+        android:layout_marginTop="13dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewDenunciar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewDescricaoLinha"
+        android:layout_alignStart="@+id/textViewDescricaoLinha"
+        android:layout_below="@+id/textViewDescricaoLinha"
+        android:layout_marginTop="5dp"
+        android:text="Denunciar"
+        android:textColor="@color/vermelho"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewUsuarioLinha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewDescricaoLinha"
+        android:layout_marginTop="25dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/azulForte"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewLocalizacaoLinha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewUsuarioLinha"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/azulForte"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textViewLocalizacaoLinha"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView17"
+        android:layout_alignStart="@+id/textView17"
+        android:layout_below="@+id/textViewTipoLinha"
+        android:layout_marginTop="5dp"
+        android:text="Tipo de Anúncio"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewTipoDeAnuncioLinha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView24"
+        android:layout_alignBottom="@+id/textView24"
+        android:layout_alignEnd="@+id/textViewCategoriaLinha"
+        android:layout_alignRight="@+id/textViewCategoriaLinha"
+        android:layout_toEndOf="@+id/textView24"
+        android:layout_toRightOf="@+id/textView24"
+        android:text="TextView"
+        android:textAlignment="viewEnd"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView24"
+        android:layout_alignStart="@+id/textView24"
+        android:layout_below="@+id/textView24"
+        android:layout_marginTop="5dp"
+        android:text="Data da Inserção"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textViewDataLinha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView26"
+        android:layout_alignEnd="@+id/textViewCategoriaLinha"
+        android:layout_alignRight="@+id/textViewCategoriaLinha"
+        android:layout_toEndOf="@+id/textView24"
+        android:layout_toRightOf="@+id/textView24"
+        android:text="TextView"
+        android:textAlignment="viewEnd"
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
+
+</RelativeLayout>

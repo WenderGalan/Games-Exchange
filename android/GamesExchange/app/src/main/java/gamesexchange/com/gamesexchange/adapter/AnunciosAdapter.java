@@ -19,13 +19,13 @@ import gamesexchange.com.gamesexchange.model.Anuncio;
  * Created by Wender on 26/02/2018.
  */
 
-public class MeusAnunciosAdapter extends ArrayAdapter<Anuncio> {
+public class AnunciosAdapter extends ArrayAdapter<Anuncio> {
 
     private ArrayList<Anuncio> anuncios;
     private Context context;
 
 
-    public MeusAnunciosAdapter(Context c, int resource, ArrayList<Anuncio> objects) {
+    public AnunciosAdapter(Context c, int resource, ArrayList<Anuncio> objects) {
         super(c,0, objects);
         this.anuncios = objects;
         this.context = c;
@@ -40,7 +40,7 @@ public class MeusAnunciosAdapter extends ArrayAdapter<Anuncio> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
             //Montar a view a partir do XML
-            view = inflater.inflate(R.layout.lista_meus_anuncios, parent, false);
+            view = inflater.inflate(R.layout.lista_anuncios, parent, false);
 
             TextView tituloAnuncio = view.findViewById(R.id.textViewTituloAdapter);
             TextView cidadeDate = view.findViewById(R.id.textViewCidadeDateAdapter);

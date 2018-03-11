@@ -45,11 +45,13 @@
     <include layout="@layout/content_anuncio_detalhes" />
 
     <include
+        android:id="@+id/includeBotaoFlutuantes"
         layout="@layout/content_botoes_flutuantes"
         android:visibility="visible" />
 
     <include
-        layout="@layout/content_botao_editar_flutuante"
-        android:visibility="invisible" />
+        android:id="@+id/includeBotaoExcluir"
+        layout="@layout/content_botao_excluir_flutuante"
+        android:visibility="visible" />
 
 </android.support.design.widget.CoordinatorLayout>

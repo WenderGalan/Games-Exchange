@@ -2,11 +2,10 @@ package gamesexchange.com.gamesexchange.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,14 +19,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import gamesexchange.com.gamesexchange.R;
-import gamesexchange.com.gamesexchange.util.Validator;
-import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
-import gamesexchange.com.gamesexchange.helper.Preferencias;
-import gamesexchange.com.gamesexchange.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -44,6 +37,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import gamesexchange.com.gamesexchange.R;
+import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
+import gamesexchange.com.gamesexchange.helper.Preferencias;
+import gamesexchange.com.gamesexchange.model.Usuario;
+import gamesexchange.com.gamesexchange.util.Validator;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -66,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         verificarUsuarioLogado();
+
+
 
         email = findViewById(R.id.editTextEmail);
         senha = findViewById(R.id.editTextSenha);
@@ -154,6 +155,18 @@ public class LoginActivity extends AppCompatActivity {
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         if (autenticacao.getCurrentUser() != null){
             abrirTelaPrincipal();
+        }else{
+            final android.app.AlertDialog.Builder alertDialog = new android.app.AlertDialog.Builder(LoginActivity.this);
+            alertDialog.setTitle("Informações");
+            alertDialog.setMessage(getString(R.string.text));
+            alertDialog.setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                     dialogInterface.dismiss();
+                }
+            });
+
+            alertDialog.show();
         }
     }
 

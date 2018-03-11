@@ -13,6 +13,7 @@ import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 
 public class Anuncio implements Serializable, Cloneable{
 	private String id;
+	private String idUsuario;
 	private String imagens;
 	private String titulo;
 	private String descricao;
@@ -145,6 +146,14 @@ public class Anuncio implements Serializable, Cloneable{
 	}
 	public void setTipoAnuncio(String tipoAnuncio) {
 		this.tipoAnuncio = tipoAnuncio;
+	}
+
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public void salvar(){
