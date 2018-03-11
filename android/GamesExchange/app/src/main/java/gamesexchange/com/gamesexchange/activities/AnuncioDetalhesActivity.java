@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -43,7 +43,7 @@ public class AnuncioDetalhesActivity extends AppCompatActivity implements BaseSl
     private String tipo;
     private FloatingTextButton ligar;
     private FloatingTextButton email;
-    private Toolbar toolbar;
+    private CollapsingToolbarLayout toolbar;
     private String[] imagens;
     private String UIDUsuario;
     private Usuario usuario;
@@ -68,7 +68,7 @@ public class AnuncioDetalhesActivity extends AppCompatActivity implements BaseSl
         ligar = findViewById(R.id.floatingButtonTextLigar);
         email = findViewById(R.id.floatingButtonTextEmail);
         slider = findViewById(R.id.sliderMeuAnuncio);
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar_layout);
         valor = findViewById(R.id.textViewValorLinha);
         categoria = findViewById(R.id.textViewCategoriaLinha);
         tipoDeAnuncio = findViewById(R.id.textViewTipoDeAnuncioLinha);
@@ -81,7 +81,6 @@ public class AnuncioDetalhesActivity extends AppCompatActivity implements BaseSl
         text = findViewById(R.id.textView23);
 
 
-        setSupportActionBar(toolbar);
 
         anuncio = (Anuncio) getIntent().getSerializableExtra("anuncio");
         tipo = getIntent().getStringExtra("tipo");

@@ -65,6 +65,7 @@ public final class ListaItens {
 
     public static List<String> getListaModeloVideoGames() {
         listaModeloVideoGames = new ArrayList<String>();
+        listaModeloVideoGames.add("Xbox One X");
         listaModeloVideoGames.add("Xbox One");
         listaModeloVideoGames.add("Xbox 360");
         listaModeloVideoGames.add("Xbox");

@@ -92,7 +92,9 @@ public class InicioFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null){
-
+                    if (anuncios.size() > 0){
+                        anuncios.clear();
+                    }
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                         Anuncio anuncio = snapshot.getValue(Anuncio.class);
                         anuncios.add(anuncio);
@@ -111,29 +113,10 @@ public class InicioFragment extends Fragment {
 
     }
 
-
     private void novoAnuncio(){
         Intent intent = new Intent(getActivity(), NovoAnuncioActivity.class);
         startActivity(intent);
     }
 
-    private boolean recuperarAjuda(){
-        DatabaseReference referencia = ConfiguracaoFirebase.getFirebase().child("ajuda");
-        referencia.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("DEBUG", "Carregou a ajuda - INICIO FRAGMENT");
-                ajuda = dataSnapshot.getValue(Ajuda.class);
-                retorno = true;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.i("DEBUG", "Não carregou a ajuda");
-            }
-        });
-
-        return retorno;
-    }
 
 }

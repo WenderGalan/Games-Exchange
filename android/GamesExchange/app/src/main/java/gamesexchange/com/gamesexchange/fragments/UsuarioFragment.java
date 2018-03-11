@@ -112,8 +112,8 @@ public class UsuarioFragment extends Fragment{
 
                     }else{
                         Log.i("DEBUG", "O Usuario tem anuncios");
-                        idAnuncios = usuario.getMeusAnuncios().split(",");
                         meusAnuncios.clear();
+                        idAnuncios = usuario.getMeusAnuncios().split(",");
                         for (int i = 0 ; i < idAnuncios.length ; i++){
                             buscarAnuncio(idAnuncios[i]);
                         }
