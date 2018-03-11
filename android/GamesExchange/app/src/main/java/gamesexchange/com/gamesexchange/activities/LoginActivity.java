@@ -41,6 +41,7 @@ import org.json.JSONObject;
 import gamesexchange.com.gamesexchange.R;
 import gamesexchange.com.gamesexchange.config.ConfiguracaoFirebase;
 import gamesexchange.com.gamesexchange.helper.Preferencias;
+import gamesexchange.com.gamesexchange.model.Ajuda;
 import gamesexchange.com.gamesexchange.model.Usuario;
 import gamesexchange.com.gamesexchange.util.Validator;
 
@@ -58,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference firebase;
     private ValueEventListener valueEventListenerUsuario;
     private AccessToken accessToken;
+    private Ajuda ajuda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +171,7 @@ public class LoginActivity extends AppCompatActivity {
             alertDialog.show();
         }
     }
+
 
     private void abrirTelaPrincipal(){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

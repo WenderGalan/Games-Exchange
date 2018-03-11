@@ -65,14 +65,10 @@ public class UsuarioFragment extends Fragment{
         // Required empty public constructor
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_usuario, container, false);
-
-
         //Configurando a toolbar
         toolbarUsuario = view.findViewById(R.id.toolbar_usuario);
         //toolbarUsuario.setLogo(R.drawable.logo_texto);
@@ -148,9 +144,6 @@ public class UsuarioFragment extends Fragment{
                 abrirEditarPerfil();
             }
         });
-
-        //Resgata os anuncios do usuario
-
 
         //Setar o list view aqui
         adapter = new AnunciosAdapter(getContext(), 0, meusAnuncios);

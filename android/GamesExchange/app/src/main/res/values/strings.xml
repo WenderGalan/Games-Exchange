@@ -148,6 +148,6 @@
     <string name="title_activity_anuncio_detalhes">AnuncioDetalhesActivity</string>
     <string name="paginas">PÁGINAS</string>
     <string name="termos_de_uso">Termos de Uso</string>
-    <string name="text">Está aplicação ainda está em desenvolvimento e pedimos a sua paciência para determinadas tarefas dentro do aplicativo, das funcionalidades implementadas as que ainda não estão desenvolvidas são:\n- Busca por texto\n- Filtragem de Resultados\n- Edição de Anúncios e\n- Visualização de imagens</string>
+    <string name="text">Está aplicação ainda está em desenvolvimento (Fase BETA) e pedimos a sua paciência para determinadas tarefas dentro do aplicativo, das funcionalidades implementadas as que ainda não estão desenvolvidas são:\n- Busca por texto\n- Filtragem de Resultados\n- Edição de Anúncios e\n- Visualização de imagens</string>
 
 </resources>

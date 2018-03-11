@@ -266,6 +266,7 @@ public class AnuncioDetalhesActivity extends AppCompatActivity implements BaseSl
             data.setText(anuncio.getDataDaInsercao());
             localizacao.setText(anuncio.getCidade() + " - " + anuncio.getEstado());
 
+
         }
 
 
