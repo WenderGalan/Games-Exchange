@@ -47,24 +47,24 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.firebase:firebase-core:11.6.2'
-    compile 'com.google.firebase:firebase-database:11.6.2'
-    compile 'com.google.firebase:firebase-storage:11.6.2'
-    compile 'com.google.firebase:firebase-auth:11.6.2'
-    compile 'com.google.firebase:firebase-ads:11.6.2'
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation 'com.google.firebase:firebase-core:11.6.2'
+    implementation 'com.google.firebase:firebase-database:11.6.2'
+    implementation 'com.google.firebase:firebase-storage:11.6.2'
+    implementation 'com.google.firebase:firebase-auth:11.6.2'
+    implementation 'com.google.firebase:firebase-ads:11.6.2'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
-    compile 'com.google.firebase:firebase-perf:11.6.2'
-    compile 'com.github.rtoshiro.mflibrary:mflibrary:1.0.0'
-    compile 'com.squareup.picasso:picasso:2.3.2'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.daimajia.slider:library:1.1.5@aar'
-    compile 'de.hdodenhof:circleimageview:2.2.0'
-    compile 'com.github.gilberto-torrezan:viacep:1.2.0'
-    compile 'com.google.android.gms:play-services:11.6.2'
-    compile 'com.github.dimorinny:floating-text-button:0.0.4'
-    compile 'com.android.support:multidex:1.0.0'
+    implementation 'com.google.firebase:firebase-perf:11.6.2'
+    implementation 'com.github.rtoshiro.mflibrary:mflibrary:1.0.0'
+    implementation 'com.squareup.picasso:picasso:2.3.2'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.daimajia.slider:library:1.1.5@aar'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.gilberto-torrezan:viacep:1.2.0'
+    implementation 'com.google.android.gms:play-services:11.6.2'
+    implementation 'com.github.dimorinny:floating-text-button:0.0.4'
+    implementation 'com.android.support:multidex:1.0.0'
 
 }
 
