@@ -1,0 +1,8 @@
+Host: ec2-107-20-211-10.compute-1.amazonaws.com
+Database: d6ca33np53vifq
+User: errlytyirvarjq
+Port: 5432
+Password: 7dc251af36b59fec402a877e56d0a64ea75f10cbdec8705847e44463982a2888
+URI: postgres://errlytyirvarjq:7dc251af36b59fec402a877e56d0a64ea75f10cbdec8705847e44463982a2888@ec2-107-20-211-10.compute-1.amazonaws.com:5432/d6ca33np53vifq
+Heroku CLI: heroku pg:psql postgresql-flat-79732 --app casa-facil-imoveis
+URL: jdbc:postgresql://ec2-107-20-211-10.compute-1.amazonaws.com:5432/d6ca33np53vifq?sslmode=require
